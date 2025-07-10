@@ -1,0 +1,218 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d22aa4b760cf7414bb2626fb352c2bc2, type: 3}
+  m_Name: Game
+  m_EditorClassIdentifier: 
+  viewPosition: {x: -95.2, y: -76.8, z: 0}
+  viewScale: {x: 0.65751624, y: 0.65751624, z: 1}
+  runtime_GUID: 
+  all_runtime_States:
+    list:
+    - _key: Base Layer
+      _value:
+      - parentStateMachineName: Base Layer
+        name: Any State
+        behaviourInfos: []
+        isBuildInitState: 1
+        buildStateName: Any State
+        IsSubStateMachine: 0
+        IsDefaultState: 0
+        upMachineName: 
+        position:
+          serializedVersion: 2
+          x: 0
+          y: 100
+          width: 200
+          height: 40
+      - parentStateMachineName: Base Layer
+        name: Entry
+        behaviourInfos: []
+        isBuildInitState: 1
+        buildStateName: Entry
+        IsSubStateMachine: 0
+        IsDefaultState: 0
+        upMachineName: 
+        position:
+          serializedVersion: 2
+          x: 0
+          y: 300
+          width: 200
+          height: 40
+      - parentStateMachineName: Base Layer
+        name: MainMenu
+        behaviourInfos:
+        - typeName: Slap.MainMenuState
+          guid: b25c157f6048fe44d93b76286349089d
+        isBuildInitState: 0
+        buildStateName: 
+        IsSubStateMachine: 0
+        IsDefaultState: 1
+        upMachineName: 
+        position:
+          serializedVersion: 2
+          x: 340
+          y: 180
+          width: 200
+          height: 40
+      - parentStateMachineName: Base Layer
+        name: Game
+        behaviourInfos:
+        - typeName: Slap.GlobalState
+          guid: aecbdaf8611ddd64fa4285de17e47861
+        isBuildInitState: 0
+        buildStateName: 
+        IsSubStateMachine: 1
+        IsDefaultState: 0
+        upMachineName: 
+        position:
+          serializedVersion: 2
+          x: 340
+          y: 300
+          width: 200
+          height: 40
+    - _key: Game
+      _value:
+      - parentStateMachineName: Game
+        name: Entry
+        behaviourInfos: []
+        isBuildInitState: 1
+        buildStateName: Entry
+        IsSubStateMachine: 0
+        IsDefaultState: 0
+        upMachineName: 
+        position:
+          serializedVersion: 2
+          x: 0
+          y: 300
+          width: 200
+          height: 40
+      - parentStateMachineName: Game
+        name: Any State
+        behaviourInfos: []
+        isBuildInitState: 1
+        buildStateName: Any State
+        IsSubStateMachine: 0
+        IsDefaultState: 0
+        upMachineName: 
+        position:
+          serializedVersion: 2
+          x: 0
+          y: 100
+          width: 200
+          height: 40
+      - parentStateMachineName: Game
+        name: up
+        behaviourInfos: []
+        isBuildInitState: 1
+        buildStateName: up
+        IsSubStateMachine: 0
+        IsDefaultState: 0
+        upMachineName: Base Layer
+        position:
+          serializedVersion: 2
+          x: 660
+          y: 260
+          width: 200
+          height: 40
+      - parentStateMachineName: Game
+        name: WaitStart
+        behaviourInfos:
+        - typeName: Slap.WaitStartState
+          guid: fe3564f352866ee4394fff9750f155c7
+        isBuildInitState: 0
+        buildStateName: 
+        IsSubStateMachine: 0
+        IsDefaultState: 1
+        upMachineName: 
+        position:
+          serializedVersion: 2
+          x: 340
+          y: 180
+          width: 200
+          height: 40
+      - parentStateMachineName: Game
+        name: Gaming
+        behaviourInfos:
+        - typeName: Slap.GamingState
+          guid: 24a51065e8e6ade4f9ea10dcc18fcb0f
+        isBuildInitState: 0
+        buildStateName: 
+        IsSubStateMachine: 0
+        IsDefaultState: 0
+        upMachineName: 
+        position:
+          serializedVersion: 2
+          x: 340
+          y: 260
+          width: 200
+          height: 40
+      - parentStateMachineName: Game
+        name: End
+        behaviourInfos:
+        - typeName: Slap.EndState
+          guid: 293d8d726cb0a31459d9acf675f21811
+        isBuildInitState: 0
+        buildStateName: 
+        IsSubStateMachine: 0
+        IsDefaultState: 0
+        upMachineName: 
+        position:
+          serializedVersion: 2
+          x: 340
+          y: 360
+          width: 200
+          height: 40
+  all_runtime_Transitions:
+    list:
+    - _key: Base Layer
+      _value:
+      - fromStateName: MainMenu
+        toStateName: Game
+        autoSwitch: 0
+        conditions:
+        - targetValue: 0
+          parameterName: GameState
+          compareType: 0
+      - fromStateName: Game
+        toStateName: MainMenu
+        autoSwitch: 0
+        conditions:
+        - targetValue: 0
+          parameterName: GameState
+          compareType: 2
+    - _key: Game
+      _value:
+      - fromStateName: WaitStart
+        toStateName: Gaming
+        autoSwitch: 0
+        conditions:
+        - targetValue: 1
+          parameterName: GameState
+          compareType: 0
+      - fromStateName: Gaming
+        toStateName: End
+        autoSwitch: 0
+        conditions:
+        - targetValue: 2
+          parameterName: GameState
+          compareType: 0
+  all_runtime_parameters:
+  - parameterName: GameState
+    Parameter:
+      value: 0
+    parameterType: 1
+  SelectLayers:
+  - Game
+  openGenerator: 1
+  nameSpace: Slap
+  className: EndState
+  path: Assets/_My/Scripts/Control/GameState
