@@ -21,10 +21,6 @@ namespace YukiFrameWork.UI
         Buttom,
         //普通层
         Common,
-        //道具层
-        prop,
-        //UI层
-        UI,
         //动画层
         Animation,
         //弹出层

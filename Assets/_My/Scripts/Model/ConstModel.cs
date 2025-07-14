@@ -20,8 +20,7 @@ namespace Slap
 
         public const string GameSceneName = "Game"; //游戏场景名称
 
-        public const int MaxLinkViewer = 16;
-
+        public const string CampTag = "Camp";
 
     }
 }

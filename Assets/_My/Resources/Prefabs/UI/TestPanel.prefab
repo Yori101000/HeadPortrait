@@ -4503,7 +4503,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   giftItemPrefab: {fileID: 7038461673822611772}
-  config: {fileID: 0}
+  config: {fileID: 11400000, guid: 367e0eeb354fd0b42a2605b626f976ce, type: 2}
 --- !u!1 &6806674245747274595
 GameObject:
   m_ObjectHideFlags: 0
@@ -6276,7 +6276,7 @@ MonoBehaviour:
     scriptNamespace: Slap.UI
     createName: Yuki
     createEmail: 1274672030@qq.com
-    systemNowTime: 2025/7/3 16:17:10
+    systemNowTime: 2025/7/11 16:33:25
     description: "\u8FD9\u662F\u4E00\u4E2A\u6846\u67B6\u5DE5\u5177\u521B\u5EFA\u7684\u811A\u672C"
     onLoading: 0
     isFolderCreateScripts: 1

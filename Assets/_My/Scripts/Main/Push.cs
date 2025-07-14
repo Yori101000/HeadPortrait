@@ -25,11 +25,6 @@ namespace Slap
         public override void OnInit()
         {
             UIKit.Init(new MyUILoader());
-            AudioKit.Init(new MyAudioLoaderPools());
-            // UIKit.Init(OnProjectName);
-            // AudioKit.Init(OnProjectName);
-
-            // SceneTool.XFABManager.Init(OnProjectName);
         }
         //配表构建，通过ArchitectureTable可以在架构中缓存部分需要的资源,例如TextAssets ScriptableObject
         protected override ArchitectureTable BuildArchitectureTable() => default;
@@ -65,39 +60,6 @@ namespace Slap
             Resources.UnloadAsset(item);
         }
 
-    }
-    public class MyAudioLoader : IAudioLoader
-    {
-        private AudioClip mClip;
-        public AudioClip Clip => mClip;
-
-        public AudioClip LoadClip(string path)
-        {
-            mClip = Resources.Load<AudioClip>($"Audio/{path}");
-            return mClip;
-        }
-
-        public void LoadClipAsync(string path, Action<AudioClip> completedLoad)
-        {
-            var result = Resources.LoadAsync<AudioClip>($"Audio/{path}");
-            result.completed += operation =>
-            {
-                if (operation.isDone)
-                    completedLoad?.Invoke(result.asset as AudioClip);
-            };
-        }
-
-        public void UnLoad()
-        {
-            Resources.UnloadAsset(mClip);
-        }
-    }
-    public class MyAudioLoaderPools : IAudioLoaderPools
-    {
-        public IAudioLoader CreateAudioLoader()
-        {
-            return new MyAudioLoader();
-        }
     }
 
 

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: ExpertCodeConfig
   m_EditorClassIdentifier: 
   NameSpace: Slap
-  FoldPath: Assets/_My/Scripts/Model
-  Name: CampModel
-  ParentType: 2
+  FoldPath: Assets/_My/Scripts/Control/GameObject
+  Name: Camp
+  ParentType: 6
   levelInterface: 0
   customInterface: 0
   IsScruct: 0

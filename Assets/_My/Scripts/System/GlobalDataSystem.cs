@@ -21,11 +21,13 @@ namespace Slap
     public class GlobalDataSystem : AbstractSystem
     {
         #region 数据 (因为不需要存档所以直接放到系统中也是可以的)
-        private PlayersModel playersModel;
-        private CampModel campModel;
+
+        public GameModel gameModel { get; private set; }
+        public PlayersModel playersModel{ get; private set; }
+        public CampModel campModel { get; private set; }
 
         //积分相关
-        private int pointPool => campModel.leftCamp.point + campModel.rightCamp.point; 
+        private int pointPool => campModel.GetAllPoint(); 
         private float pointBarMaxValue = 1000;  //TODO 等待指定修改
 
 
@@ -55,6 +57,7 @@ namespace Slap
 
         public override void Init()
         {
+            gameModel = this.GetModel<GameModel>();
             playersModel = this.GetModel<PlayersModel>();
             campModel = this.GetModel<CampModel>();
 
@@ -69,7 +72,7 @@ namespace Slap
             OnLeftScoreChanged += () => UpdateData(1);
             OnLeftScoreChanged += () => gameUIPanel.UpdateLeftViewerUI(list_leftPlayerData);
             OnLeftScoreChanged += () => UpdateLeftMomentum(list_leftPlayerData);
-            OnLeftScoreChanged += () => UpdateLeftPointBar();
+            // OnLeftScoreChanged += () => UpdateLeftPointBar();
             OnLeftScoreChanged += () => CheckLeftPointBar();
 
             OnLeftWin += () => DispenseWinPoint(1);
@@ -77,15 +80,13 @@ namespace Slap
             OnRightScoreChanged += () => UpdateData(2);
             OnRightScoreChanged += () => gameUIPanel.UpdateRightViewerUI(list_rightPlayerData);
             OnRightScoreChanged += () => UpdateRightMomentum(list_rightPlayerData);
-            OnRightScoreChanged += () => UpdateRightPointBar();
+            // OnRightScoreChanged += () => UpdateRightPointBar();
             OnRightScoreChanged += () => CheckRightPointBar();
 
             OnRightWin += () => DispenseWinPoint(2);
 
 
 
-            gameUIPanel.UpdateLeftHealthUI(campModel.leftCamp.health);
-            gameUIPanel.UpdateRightHealthUI(campModel.rightCamp.health);
             
 #if UNITY_EDITOR
 
@@ -100,7 +101,7 @@ namespace Slap
             OnLeftScoreChanged -= () => UpdateData(1);
             OnLeftScoreChanged -= () => gameUIPanel.UpdateLeftViewerUI(list_leftPlayerData);
             OnLeftScoreChanged -= () => UpdateLeftMomentum(list_leftPlayerData);
-            OnLeftScoreChanged -= () => UpdateLeftPointBar();
+            // OnLeftScoreChanged -= () => UpdateLeftPointBar();
             OnLeftScoreChanged -= () => CheckLeftPointBar();
 
             OnLeftWin -= () => DispenseWinPoint(1);
@@ -109,7 +110,7 @@ namespace Slap
             OnRightScoreChanged -= () => UpdateData(2);
             OnRightScoreChanged -= () => gameUIPanel.UpdateRightViewerUI(list_rightPlayerData);
             OnRightScoreChanged -= () => UpdateRightMomentum(list_rightPlayerData);
-            OnRightScoreChanged -= () => UpdateRightPointBar();
+            // OnRightScoreChanged -= () => UpdateRightPointBar();
             OnRightScoreChanged -= () => CheckRightPointBar();
 
             OnLeftWin -= () => DispenseWinPoint(2);
@@ -118,11 +119,13 @@ namespace Slap
         }
         public void Update()
         {
-            UpdateCharge();
-            CheckCharge();
-            gameUIPanel.UpdatePointPoolUI(pointPool);
-            gameUIPanel.UpdateWinPointUI(campModel.leftCamp.winPoint, campModel.rightCamp.winPoint);
+            // UpdateCharge();
+            // CheckCharge();
+            // gameUIPanel.UpdatePointPoolUI(pointPool);
+            // gameUIPanel.UpdateWinPointUI(campModel.leftCamp.winPoint, campModel.rightCamp.winPoint);
         }
+
+
 
         #region 更新数据
 
@@ -144,36 +147,36 @@ namespace Slap
         }
         private void UpdateLeftMomentum(List<PlayerData> list_PlayerData)
         {
-            var totalMomentum = 0;
-            foreach (var playerData in list_PlayerData)
-                totalMomentum += playerData.userScore;
-            campModel.leftCamp.momentum = totalMomentum;
-            gameUIPanel.UpdateLeftMomentumUI(totalMomentum);
+            // var totalMomentum = 0;
+            // foreach (var playerData in list_PlayerData)
+            //     totalMomentum += playerData.userScore;
+            // campModel.leftCamp.momentum = totalMomentum;
+            // gameUIPanel.UpdateLeftMomentumUI(totalMomentum);
         }
         private void UpdateRightMomentum(List<PlayerData> list_PlayerData)
         {
-            var totalMomentum = 0;
-			foreach (var playerData in list_PlayerData)
-				totalMomentum += playerData.userScore;
-            campModel.rightCamp.momentum = totalMomentum;
-            gameUIPanel.UpdateRightMomentumUI(totalMomentum);
+            // var totalMomentum = 0;
+			// foreach (var playerData in list_PlayerData)
+			// 	totalMomentum += playerData.userScore;
+            // campModel.rightCamp.momentum = totalMomentum;
+            // gameUIPanel.UpdateRightMomentumUI(totalMomentum);
         }
         private void UpdateCharge()
         {
-            float momentumDiff = campModel.leftCamp.momentum - campModel.rightCamp.momentum;
-            float diffRatio = Mathf.Clamp(momentumDiff / MaxMomentumDiff, -1f, 1f);
-            float pushSpeed = diffRatio * maxPushPerSecond;
-            gameUIPanel.UpdateChargeUI(pushSpeed);
+            // float momentumDiff = campModel.leftCamp.momentum - campModel.rightCamp.momentum;
+            // float diffRatio = Mathf.Clamp(momentumDiff / MaxMomentumDiff, -1f, 1f);
+            // float pushSpeed = diffRatio * maxPushPerSecond;
+            // gameUIPanel.UpdateChargeUI(pushSpeed);
         }
-        private void UpdateLeftPointBar() => gameUIPanel.UpdateLeftPointBarUI(campModel.leftCamp.point / pointBarMaxValue);
-        private void UpdateRightPointBar() => gameUIPanel.UpdateRightPointBarUI(campModel.rightCamp.point / pointBarMaxValue);
+        // private void UpdateLeftPointBar() => gameUIPanel.UpdateLeftPointBarUI(campModel.leftCamp.point / pointBarMaxValue);
+        // private void UpdateRightPointBar() => gameUIPanel.UpdateRightPointBarUI(campModel.rightCamp.point / pointBarMaxValue);
         private void UpdateScore(PlayerData playerData)
         {
-            if (playerData.userCamp == 1)
+            if ((int)playerData.userCamp == 1)
             {
                 OnLeftScoreChanged?.Invoke();
             }
-            else if (playerData.userCamp == 2)
+            else if ((int)playerData.userCamp == 2)
             {
                 OnRightScoreChanged?.Invoke();
             }
@@ -202,27 +205,27 @@ namespace Slap
         {
             var value = gameUIPanel.GetChargeProcess();
             //左方胜利
-            if (value == 1)
-            {
+            // if (value == 1)
+            // {
 
-                if (campModel.rightCamp.health == 1)
-                    OnLeftWin.Invoke();
-                else if (campModel.rightCamp.health > 1)
-                    OnLeftRoundWin.Invoke();
-            }
-            //右方胜利
-            else if (value == 0)
-            {
+            //     if (campModel.rightCamp.health == 1)
+            //         OnLeftWin.Invoke();
+            //     else if (campModel.rightCamp.health > 1)
+            //         OnLeftRoundWin.Invoke();
+            // }
+            // //右方胜利
+            // else if (value == 0)
+            // {
 
-                if (campModel.leftCamp.health == 1)
-                    OnRightWin.Invoke();
-                else if (campModel.leftCamp.health > 1)
-                    OnRightRoundWin.Invoke();
-            }
+            //     if (campModel.leftCamp.health == 1)
+            //         OnRightWin.Invoke();
+            //     else if (campModel.leftCamp.health > 1)
+            //         OnRightRoundWin.Invoke();
+            // }
         }
         private void CheckLeftPointBar()
         {
-            float progress = campModel.leftCamp.point / pointBarMaxValue;
+            // float progress = campModel.leftCamp.point / pointBarMaxValue;
             //为积分条添加事件
             // 例如 
             /*
@@ -259,23 +262,23 @@ namespace Slap
             }
         }
        
-        public IEnumerator AddScoreCor(PlayerData playerData, EffectData effectData)
+        public IEnumerator AddScoreCor(PlayerData playerData, GiftScoreData propData)
         {
             int timer = 0;
             int additions = 0;
 
             //增加积分池
             //TODO 更改积分池规则
-            if (playerData.userCamp == 1)
-                campModel.leftCamp.point += effectData.point;
-            else
-                campModel.rightCamp.point += effectData.point;
+            // if (playerData.userCamp == 1)
+            //     campModel.leftCamp.point += propData.point;
+            // else
+            //     campModel.rightCamp.point += propData.point;
 
 
-            while (timer < effectData.duration)
+            while (timer < propData.duration)
             {
-                playerData.userScore += effectData.baseScore;
-                additions += effectData.baseScore;
+                playerData.userScore += propData.baseScore;
+                additions += propData.baseScore;
 
                 UpdateScore(playerData);
 
@@ -291,22 +294,22 @@ namespace Slap
         //数据处理
         public void ReduceHealth(int camp)
         {
-            if (camp == 1)
-            {
-                campModel.leftCamp.health--;
-                gameUIPanel.UpdateLeftHealthUI(campModel.leftCamp.health);
-            }
-            else
-            {
-                campModel.rightCamp.health--;
-                gameUIPanel.UpdateRightHealthUI(campModel.rightCamp.health);
-            }
+            // if (camp == 1)
+            // {
+            //     campModel.leftCamp.health--;
+            //     gameUIPanel.UpdateLeftHealthUI(campModel.leftCamp.health);
+            // }
+            // else
+            // {
+            //     campModel.rightCamp.health--;
+            //     gameUIPanel.UpdateRightHealthUI(campModel.rightCamp.health);
+            // }
         }
         public void InitRoundData()
         {
-            campModel.leftCamp.InitRound();
-            campModel.rightCamp.InitRound();
-            playersModel.InitRound();
+            // campModel.leftCamp.InitRound();
+            // campModel.rightCamp.InitRound();
+            // playersModel.InitRound();
         }
 
 
@@ -327,17 +330,17 @@ namespace Slap
             return true;
         }
         //分配阵营
-        public bool AllotPlayerToCamp(PlayerData playerData, int toCamp)
+        public bool AllotPlayerToCamp(PlayerData playerData, PlayerData.CampType toCamp)
         {
             if (playersModel.Dic_AllPlayerData.TryGetValue(playerData.userName, out PlayerData existingPlayerData))
             {
                 //如果玩家数据的阵营为0，则设置为当前分配的阵营
-                if (playerData.userCamp == 0)
+                if (playerData.userCamp == PlayerData.CampType.None)
                 {
                     playerData.userCamp = toCamp;
 
                     //根据阵营更新到对应的字典中
-                    if (playerData.userCamp == 1)
+                    if (playerData.userCamp == PlayerData.CampType.camp1)
                     {
                         playersModel.Dic_LeftPlayerData.Add(playerData.userName, playerData);
 
@@ -346,7 +349,7 @@ namespace Slap
 
                         OnLeftScoreChanged?.Invoke();
                     }
-                    else if (playerData.userCamp == 2)
+                    else if (playerData.userCamp == PlayerData.CampType.camp2)
                     {
                         playersModel.Dic_RightPlayerData.Add(playerData.userName, playerData);
                         AllotWinPoint(toCamp);
@@ -365,15 +368,15 @@ namespace Slap
             return false;
 
             //分配胜点方法
-            void AllotWinPoint(int toCamp)
+            void AllotWinPoint(PlayerData.CampType toCamp)
             {
-                var winPoint = playerData.userWinPoint;
-                if (toCamp == 1)
-                    campModel.leftCamp.winPoint += winPoint;
-                else
-                    campModel.rightCamp.winPoint += winPoint;
+                // var winPoint = playerData.userWinPoint;
+                // if (toCamp == 1)
+                //     campModel.leftCamp.winPoint += winPoint;
+                // else
+                //     campModel.rightCamp.winPoint += winPoint;
 
-                playerData.userWinPoint -= winPoint;
+                // playerData.userWinPoint -= winPoint;
             }
             
         }

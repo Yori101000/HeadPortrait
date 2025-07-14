@@ -17,6 +17,7 @@ namespace Slap
     public class PlayersModel : AbstractModel
     {
         #region 字段
+
         // 注意   
         // 因为 Dic_AllPlayerData 和 Dic_Left(Right)PlayerData 这两个字典中
         // 存储的是同一个 PlayerData 实例的引用
@@ -66,8 +67,17 @@ namespace Slap
         public string userName;
         public Sprite icon; //头像
         public int userScore;
-        public int userCamp; // 1=红色，2=蓝色
+        public CampType userCamp = CampType.None;
         public int userWinPoint;
+
+        public enum CampType
+        {
+            camp1,
+            camp2,
+            camp3,
+            camp4,
+            None,
+        }
     }
 
 }

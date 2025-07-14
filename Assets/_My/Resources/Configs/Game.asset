@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22aa4b760cf7414bb2626fb352c2bc2, type: 3}
   m_Name: Game
   m_EditorClassIdentifier: 
-  viewPosition: {x: -95.2, y: -76.8, z: 0}
+  viewPosition: {x: -64.8, y: -120, z: 0}
   viewScale: {x: 0.65751624, y: 0.65751624, z: 1}
   runtime_GUID: 
   all_runtime_States:
@@ -168,7 +168,7 @@ MonoBehaviour:
         position:
           serializedVersion: 2
           x: 340
-          y: 360
+          y: 420
           width: 200
           height: 40
   all_runtime_Transitions:
@@ -210,8 +210,7 @@ MonoBehaviour:
     Parameter:
       value: 0
     parameterType: 1
-  SelectLayers:
-  - Game
+  SelectLayers: []
   openGenerator: 1
   nameSpace: Slap
   className: EndState

@@ -57,7 +57,7 @@ namespace Slap.Test
             if (!CheckPlayer()) return;
 
             Debug.Log($"{gift.name} + 按钮2被点击了");
-            giftItemPrefab.SetActive(false);
+        giftItemPrefab.SetActive(false);
 
             giftSystem.HandleGift(TestManager.Instance.curPlayer, config, 1);
 
@@ -119,8 +119,9 @@ namespace Slap.Test
                 Debug.LogWarning("当前玩家为空");
                 return false;
             }
-            if (TestManager.Instance.curPlayer.userCamp == 0)
-                globalDataSystem.AllotPlayerToCamp(TestManager.Instance.curPlayer, Random.Range(1, 3));
+            if (TestManager.Instance.curPlayer.userCamp == PlayerData.CampType.None)
+                //TODO 待更改
+                globalDataSystem.AllotPlayerToCamp(TestManager.Instance.curPlayer, (PlayerData.CampType)Random.Range(0, 2));
             return true; 
         }
 

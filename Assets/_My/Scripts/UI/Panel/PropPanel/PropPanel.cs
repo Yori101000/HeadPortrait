@@ -15,24 +15,6 @@ namespace Slap.UI
 {
 	public partial class PropPanel : BasePanel
 	{
-		public GameObject SpawnProp(PlayerData playerData, GiftPropData propData)
-		{
-			var prop = GameObjectLoader.Load(propData.PropPre, transform);
-
-			Animator animator;
-
-			if (playerData.userCamp == 1)
-			{
-				animator = prop.GetComponent<Animator>();
-				animator.Play("Left");
-			}
-			else
-			{
-				animator = prop.GetComponent<Animator>();
-				animator.Play("Right");
-			}
-			return prop;
-		}
-
+		
 	}
 }

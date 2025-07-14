@@ -10,31 +10,25 @@ using YukiFrameWork.UI;
 using UnityEngine;
 using YukiFrameWork;
 using UnityEngine.UI;
+using XFABManager;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 namespace Slap.UI
 {
 	public partial class CharacterPanel : BasePanel
 	{
-		public override void OnInit()
-		{
-			base.OnInit();
-		}
+		public List<Transform> list_WeaponParent { get; set; } = new List<Transform>();
 		public override void OnEnter(params object[] param)
 		{
 			base.OnEnter(param);
 		}
-		public override void OnPause()
-		{
-			base.OnPause();
-			LogKit.I("CharacterPanel OnPause");
-		}
-		public override void OnResume()
-		{
-			base.OnResume();
-		}
-		public override void OnExit()
-		{
-			base.OnExit();
-		}
 
+		public Transform GetWeaponParent(int camp, int index)
+		{
+			return list_WeaponParent[camp].GetChild(index);
+		}
+	
 	}
 }
+ 

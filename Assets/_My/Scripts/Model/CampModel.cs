@@ -9,33 +9,28 @@
 using YukiFrameWork;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 namespace Slap
 {
     [Registration(typeof(Slap.Push))]
     public class CampModel : AbstractModel
     {
-        public CampData leftCamp = new CampData() { health = 5 };
-        public CampData rightCamp = new CampData() { health = 5 };
+        public int campCount;
+        public Dictionary<string, Camp> dic_CampData = new Dictionary<string, Camp>();
 
- 
         public override void Init()
         {
 
         }
-    }
-    public class CampData
-    {
-        public bool hasDead { get; set; }
-        public int health { get; set; }
-        public int point { get; set; }
-        public int winPoint { get; set; }
-        public float momentum { get; set; }
-
-        public void InitRound()
+        public int GetAllPoint()
         {
-            point = 0;
-            momentum = 0;
+            var allPoint = 0;
+            foreach (var campData in dic_CampData)
+            {
+                allPoint += campData.Value.point;
+            }
+            return allPoint;
         }
-
     }
+
 }

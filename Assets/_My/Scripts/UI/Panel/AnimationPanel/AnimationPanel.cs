@@ -18,7 +18,7 @@ namespace Slap.UI
 			
 			if (giftAnimationData.type == GiftAnimationData.AnimationType.windowed)
 			{
-				if (playerData.userCamp == 1)
+				if ((int)playerData.userCamp == 1)
 				{
 					LeftAnimation.gameObject.SetActive(true);
 					LeftAnimation.Play(giftAnimationData.AnimationName);

@@ -13,14 +13,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Slap.UI;
 using YukiFrameWork.UI;
-using UnityEngine.Rendering.Universal;
 using XFABManager;
-using Unity.Burst.Intrinsics;
+
+
 namespace Slap
 {
     [Registration(typeof(Slap.Push))]
     public class GiftSystem : AbstractSystem
     {
+
         #region  弹窗
         //左侧弹窗
         private bool isPlayingLeftPopWindow;
@@ -51,7 +52,8 @@ namespace Slap
 
         //面板
         private PopPanel popPanel;
-        private PropPanel propPanel;
+        private CharacterPanel characterPanel;
+
         private AnimationPanel animationPanel;
 
         //系统
@@ -68,6 +70,8 @@ namespace Slap
             que_FullScreenGiftAnimation = new Queue<PlayGiftAnimationData>();
             que_LeftPlayGiftAnimation = new Queue<PlayGiftAnimationData>();
             que_RightPlayGiftAnimation = new Queue<PlayGiftAnimationData>();
+
+            
         }
 
         public void Start()
@@ -75,7 +79,8 @@ namespace Slap
             MonoHelper.Update_AddListener(Update);
 
             popPanel = UIKit.GetPanel<PopPanel>();
-            propPanel = UIKit.GetPanel<PropPanel>();
+            characterPanel = UIKit.GetPanel<CharacterPanel>();
+
             animationPanel = UIKit.GetPanel<AnimationPanel>();
             globalDataSystem = this.GetSystem<GlobalDataSystem>();
 
@@ -91,7 +96,7 @@ namespace Slap
         }
 
         //处理点赞
-        public void HandleLike(PlayerData playerData, EffectData effectData)
+        public void HandleLike(PlayerData playerData, GiftScoreData scoreData)
         {
             if (playerData.userName == String.Empty)
             {
@@ -103,10 +108,10 @@ namespace Slap
             //将礼物添加到处理携程中
             string timeStamp = DateTime.Now.Ticks.ToString();
 
-            globalDataSystem.AddScoreCor(playerData, effectData).Start();
+            globalDataSystem.AddScoreCor(playerData, scoreData).Start();
 
             //TODO 剩余点赞处理
-            
+
 
         }
 
@@ -127,7 +132,7 @@ namespace Slap
 
             //加分系统
             //将礼物添加到处理携程中
-            globalDataSystem?.AddScoreCor(playerData, config.effectDatas[number]).Start();
+            globalDataSystem?.AddScoreCor(playerData, config.scoreDatas[number]).Start();
 
             //弹窗
             PopWindow(playerData, config.popDatas[number]);
@@ -154,7 +159,7 @@ namespace Slap
             popData.playerData = playerData;
             popData.giftPopData = giftPopData;
 
-            if (playerData.userCamp == 1)
+            if ((int)playerData.userCamp == 1)
                 que_LeftPopWindow.Enqueue(popData);
             else
                 que_RightPopWindow.Enqueue(popData);
@@ -172,13 +177,13 @@ namespace Slap
             if (camp == 1)
             {
                 isPlayingLeftPopWindow = false;
-                if(que_LeftPopWindow != null && que_LeftPopWindow.Count > 0)
+                if (que_LeftPopWindow != null && que_LeftPopWindow.Count > 0)
                     que_LeftPopWindow.Dequeue();
             }
             else
             {
                 isPlayingRightPopWindow = false;
-                if(que_RightPopWindow != null && que_RightPopWindow.Count > 0)
+                if (que_RightPopWindow != null && que_RightPopWindow.Count > 0)
                     que_RightPopWindow.Dequeue();
             }
         }
@@ -190,7 +195,7 @@ namespace Slap
                 {
                     curLeftPopWindow = que_LeftPopWindow.Peek();
                     popPanel.PopWindow(curLeftPopWindow.playerData, curLeftPopWindow.giftPopData);
-                    StartPopWindow(curLeftPopWindow.playerData.userCamp);
+                    StartPopWindow((int)curLeftPopWindow.playerData.userCamp);
                 }
             }
 
@@ -200,7 +205,7 @@ namespace Slap
                 {
                     curRightPopWindow = que_RightPopWindow.Peek();
                     popPanel.PopWindow(curRightPopWindow.playerData, curRightPopWindow.giftPopData);
-                    StartPopWindow(curRightPopWindow.playerData.userCamp);
+                    StartPopWindow((int)curRightPopWindow.playerData.userCamp);
                 }
             }
 
@@ -217,32 +222,78 @@ namespace Slap
 
         private void SpawnProp(PlayerData playerData, GiftPropData propData)
         {
-            if (propData.PropPre == null)
+            if (propData.WeaponPre == null)
             {
                 Debug.Log("该礼物没有具体道具");
                 return;
             }
-            //生成物体并设置位置
-
-
-            PropCoroutine(playerData, propData).Start();
-
-            IEnumerator PropCoroutine(PlayerData playerData, GiftPropData propData)
-            {
-                var timer = 0;
-                var prop = propPanel.SpawnProp(playerData, propData);
-                list_Prop.Add(prop);
-
-                while (timer < propData.duration)
+                //进行道具判断
+                if (propData.type == GiftPropData.PropType.Prop)
                 {
-                    yield return new WaitForSeconds(1);
-                    timer++;
+                    GameObject prop = null;
+                    //TODO 道具处理
+
+                    list_Prop.Add(prop);
                 }
-                list_Prop.Remove(prop);
-                GameObjectLoader.UnLoad(prop);
-            }
+                else
+                {
+                    HandleWeapon(playerData, propData);
+                }
 
         }
+
+        private void HandleWeapon(PlayerData playerData, GiftPropData propData)
+        {
+            bool isAddBullet = false;
+
+            var campWeapons = globalDataSystem.campModel.dic_CampData[playerData.userCamp.ToString()].list_Weapon;
+
+            //检查当前阵营中是否有放武器的位置
+            foreach (var curWeapon in campWeapons)
+            {
+                //当前阵营武器为空，则跳过
+                if (curWeapon == null)
+                    continue;
+                if (curWeapon.name == propData.WeaponPre.name)
+                {
+                    
+                    isAddBullet = true;
+                    curWeapon.GetComponent<Weapon_Base>().bulletCount += propData.propCount;
+                    //TODO 更新武器UI子弹数量
+                }
+
+            }
+            if (!isAddBullet)
+                CreateWeapon();
+
+            void CreateWeapon()
+            {
+                int emptyIndex = campWeapons.FindIndex(w => w == null);
+                if (emptyIndex != -1 && emptyIndex < globalDataSystem.campModel.dic_CampData[playerData.userCamp.ToString()].maxWeapon)
+                {
+
+                    //创建物体，分配位置， 记录数据
+                    Transform weaponParent = characterPanel.GetWeaponParent((int)playerData.userCamp, emptyIndex);
+                    
+                    GameObject prop = GameObjectLoader.Load(propData.WeaponPre, weaponParent);
+                    //设置物体
+                    prop.name = propData.WeaponPre.name;
+                    prop.GetComponent<Weapon_Base>()?.Init(playerData.userCamp);
+
+                    campWeapons[emptyIndex] = prop;
+                    // globalDataSystem.campModel.dic_CampData[playerData.userCamp.ToString()].list_Weapon.Add(prop);
+                    list_Prop.Add(prop);
+                    
+                }
+                else
+                {
+                    Debug.LogError("超出范围");
+                }
+            }
+            
+        }
+
+
         private void ClearProp()
         {
             for (int i = 0; i < list_Prop.Count; i++)
@@ -271,7 +322,7 @@ namespace Slap
 
             if (giftAnimationData.type == GiftAnimationData.AnimationType.windowed)
             {
-                if (playerData.userCamp == 1)
+                if ((int)playerData.userCamp == 1)
                     que_LeftPlayGiftAnimation.Enqueue(playGiftAnimationData);
                 else
                     que_RightPlayGiftAnimation.Enqueue(playGiftAnimationData);
@@ -336,7 +387,7 @@ namespace Slap
                 {
                     curLeftPlayGiftAnimationData = que_LeftPlayGiftAnimation.Peek();
                     animationPanel.PlayAnimation(curLeftPlayGiftAnimationData.playerData, curLeftPlayGiftAnimationData.giftAnimationData);
-                    StartWindowedGiftAnimation(curLeftPopWindow.playerData.userCamp);
+                    StartWindowedGiftAnimation((int)curLeftPopWindow.playerData.userCamp);
 
                 }
             }
@@ -347,7 +398,7 @@ namespace Slap
                 {
                     curRightPlayGiftAnimationData = que_RightPlayGiftAnimation.Peek();
                     animationPanel.PlayAnimation(curRightPlayGiftAnimationData.playerData, curRightPlayGiftAnimationData.giftAnimationData);
-                    StartWindowedGiftAnimation(curRightPopWindow.playerData.userCamp);
+                    StartWindowedGiftAnimation((int)curRightPopWindow.playerData.userCamp);
 
                 }
             }

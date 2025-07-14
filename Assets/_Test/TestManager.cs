@@ -49,6 +49,8 @@ namespace Slap.Test
             giftSystem = this.GetSystem<GiftSystem>();
         }
 
+
+        //TODO 待更改
         private void OnUserInput(string value)
         {
             if (value == "" || curPlayer.userName == "")
@@ -63,7 +65,7 @@ namespace Slap.Test
             if (Regex.IsMatch(value, @"^1+$"))
             {
                 // 进行分配
-                if (globalDataSystem.AllotPlayerToCamp(curPlayer, 1))
+                if (globalDataSystem.AllotPlayerToCamp(curPlayer, PlayerData.CampType.camp1))
                     Debug.Log($"玩家 {curPlayer.userName} 分配成功，阵营为红色");
                 else
                     Debug.LogWarning($"玩家 {curPlayer.userName} 创建失败");
@@ -71,7 +73,7 @@ namespace Slap.Test
             if (Regex.IsMatch(value, @"^2+$"))
             {
                 // 进行分配
-                if (globalDataSystem.AllotPlayerToCamp(curPlayer, 2))
+                if (globalDataSystem.AllotPlayerToCamp(curPlayer, PlayerData.CampType.camp2))
                     Debug.Log($"玩家 {curPlayer.userName} 分配成功，阵营为蓝色");
                 else
                     Debug.LogWarning($"玩家 {curPlayer.userName} 分配失败");
@@ -80,7 +82,7 @@ namespace Slap.Test
             {
                 if (curPlayer.userCamp == 0)
                     Debug.Log($"玩家 {curPlayer.userName} 阵营为空，请重新分配");
-                giftSystem.HandleLike(curPlayer, new EffectData { baseScore = 5, duration = 3 });
+                giftSystem.HandleLike(curPlayer, new GiftScoreData { baseScore = 5, duration = 3f});
             }
         }
 

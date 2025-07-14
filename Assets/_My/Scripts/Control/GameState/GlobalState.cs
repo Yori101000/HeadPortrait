@@ -10,14 +10,23 @@ using YukiFrameWork.Machine;
 using YukiFrameWork.UI;
 using Slap.UI;
 using YukiFrameWork;
+using System.Transactions;
+using UnityEngine;
+using XFABManager;
+using System.Threading.Tasks;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 // ...existing using...
 
 namespace Slap
 {
     public class GlobalState : StateBehaviour
     {
-        GlobalDataSystem globalDataSystem;
-        GiftSystem giftSystem;
+        //面板
+        private CharacterPanel characterPanel;
+
+        private GlobalDataSystem globalDataSystem;
+        private GiftSystem giftSystem;
+        private OnlineSystem onlineSystem;
 
         public override async void OnEnter()
         {
@@ -25,8 +34,7 @@ namespace Slap
 
             // 打开UI面板
             UIKit.OpenPanel<BackGroundPanel>();
-            UIKit.OpenPanel<PropPanel>();
-            UIKit.OpenPanel<CharacterPanel>();
+            characterPanel = UIKit.OpenPanel<CharacterPanel>();
             UIKit.OpenPanel<GameUIPanel>();
             var explainPanel = UIKit.OpenPanel<ExplainPanel>();
             UIKit.OpenPanel<AnimationPanel>();
@@ -38,7 +46,9 @@ namespace Slap
             // 系统初始化
             globalDataSystem = this.GetSystem<GlobalDataSystem>();
             giftSystem = this.GetSystem<GiftSystem>();
+            onlineSystem = this.GetSystem<OnlineSystem>();
 
+            onlineSystem.Start();
             globalDataSystem.Start();
             giftSystem.Start();
 
@@ -48,7 +58,12 @@ namespace Slap
             globalDataSystem.OnLeftWin += () => OnGameWin(1);
             globalDataSystem.OnRightWin += () => OnGameWin(2);
 
+            //初始化阵营
+            //检查游戏具体人数，并对其进行具体阵营生成
+            await InitCamp();
+
             UIKit.ClosePanel<LoadingPanel>();
+
         }
 
         public override void OnUpdate()
@@ -66,6 +81,7 @@ namespace Slap
 
             globalDataSystem.End();
             giftSystem.End();
+            onlineSystem.End();
         }
 
         /// <summary>
@@ -83,7 +99,7 @@ namespace Slap
                 globalDataSystem.ReduceHealth(2);
             else
                 globalDataSystem.ReduceHealth(1);
-                
+
 
             // 重置阵容数据
             globalDataSystem.InitRoundData();
@@ -106,6 +122,53 @@ namespace Slap
                 globalDataSystem.ReduceHealth(1);
 
             SetInt("GameState", (int)GameState.End);
+        }
+
+
+        public async Task InitCamp()
+        {
+         
+            //获取Camp预制体
+            var request = Resources.LoadAsync<GameObject>("Prefabs/Camp");
+            while (!request.isDone)
+                await Task.Yield(); // 在主线程等待
+
+            GameObject campPre = request.asset as GameObject;
+
+            if (globalDataSystem.campModel.campCount == 2)
+            {
+                globalDataSystem.gameModel.PKModel = "双人";
+            }
+            else
+            {
+
+            }
+
+            characterPanel.transform.Find(globalDataSystem.gameModel.PKModel).gameObject.SetActive(true);
+            var model = characterPanel.transform.Find(globalDataSystem.gameModel.PKModel);
+
+            Transform[] campParents = new Transform[model.childCount];
+
+            for (int i = 0; i < model.childCount; i++)
+                campParents[i] = model.GetChild(i);
+
+            for (int i = 0; i < campParents.Length; i++)
+            {
+                //初始化阵营数据
+                GameObject campObj = GameObjectLoader.Load(campPre, campParents[i]);
+                campObj.name = $"Camp_{i}";
+                Camp camp = campObj.GetComponent<Camp>();
+                camp.Init((PlayerData.CampType)i);
+
+
+                globalDataSystem.campModel.dic_CampData.Add(((PlayerData.CampType)i).ToString(), camp);
+                characterPanel.list_WeaponParent.Add(camp.Find("WeaponParent").transform);
+            }
+
+            //额外 无阵营
+            GameObject noneCamp = new GameObject("None");
+            noneCamp.SetParent(model);
+            globalDataSystem.campModel.dic_CampData.Add(PlayerData.CampType.None.ToString(), noneCamp.AddComponent<Camp>());
         }
     }
 }

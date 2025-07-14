@@ -24,7 +24,7 @@ namespace Slap.UI
 			TextMeshProUGUI counter;
 			Animator animator;
 
-			if (playerData.userCamp == 1)
+			if ((int)playerData.userCamp == 1)
 			{
 				PopedLeftWindow.SetActive(true);
 				playerIcon = PopedLeftWindow.gameObject.Find("玩家头像").GetComponent<Image>();

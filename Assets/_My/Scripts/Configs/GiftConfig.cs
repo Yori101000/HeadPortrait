@@ -23,7 +23,8 @@ namespace Slap
         public GiftPopData[] popDatas = new GiftPopData[7];
         public GiftPropData[] propDatas = new GiftPropData[7];
         public GiftAnimationData[] animtionDatas = new GiftAnimationData[7];
-        public EffectData[] effectDatas = new EffectData[7];
+        public GiftScoreData[] scoreDatas = new GiftScoreData[7];
+
     }
 
     [System.Serializable]
@@ -43,8 +44,15 @@ namespace Slap
     {
         //位置在道具动画中处理
         //道具预制体
-        public GameObject PropPre;
-        public int duration;
+        public GameObject WeaponPre;
+        public int propCount;
+        public PropType type;
+
+        public enum PropType
+        {
+            Weapon,
+            Prop
+        }
     }
 
     //填充动画数据
@@ -60,15 +68,14 @@ namespace Slap
             Full
         }
     }
-    [Serializable]
-    public class EffectData
+    
+    [System.Serializable]
+    public class GiftScoreData
     {
         public int baseScore;
-        public int duration;
-        /// <summary>
-        /// 礼物的积分
-        /// </summary>
         public int point;
+        public float duration;
     }
+
     
 }
