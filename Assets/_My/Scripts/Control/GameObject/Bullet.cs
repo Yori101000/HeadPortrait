@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 using XFABManager;
+using System.Net.NetworkInformation;
 namespace Slap
 {
     public class Bullet : MonoBehaviour
@@ -21,17 +22,21 @@ namespace Slap
         private float speed;
         private Image icon;
         private PlayerData.CampType aimCamp = PlayerData.CampType.None;
+        private GameObject hitEffectPre;
+        private Transform hitEffectParent;
 
         private BoxCollider2D boxCollider2D;
         private RectTransform rectTransform;
         public void Init(Sprite _sprite, int _damage, Transform _aimTrans,
-                         float _speed, PlayerData.CampType _aimCamp, float _size)
+                         float _speed, PlayerData.CampType _aimCamp, float _size,
+                         GameObject _hitEffectPre)
         {
             sprite = _sprite;
             damage = _damage;
             aimTrans = _aimTrans;
             speed = _speed;
             aimCamp = _aimCamp;
+            hitEffectPre = _hitEffectPre;
 
             var iconRect = icon.GetComponent<RectTransform>();
             iconRect.transform.localScale = new Vector2(_size, _size);
@@ -49,6 +54,7 @@ namespace Slap
             icon = GetComponent<Image>();
             boxCollider2D = GetComponent<BoxCollider2D>();
             rectTransform = GetComponent<RectTransform>();
+            hitEffectParent = GameObject.Find("HitEffectParent").transform;
         }
         void Update()
         {
@@ -79,7 +85,10 @@ namespace Slap
                 if (collision.GetComponent<Camp>().campType == aimCamp)
                 {
                     collision.GetComponent<Camp>().ReduceHealth(damage);
-                    GameObjectLoader.UnLoad(this.gameObject);       
+                    var hitEffect = GameObjectLoader.Load(hitEffectPre, hitEffectParent);
+                    hitEffect.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+
+                    GameObjectLoader.UnLoad(this.gameObject);
                 }
             }
         }

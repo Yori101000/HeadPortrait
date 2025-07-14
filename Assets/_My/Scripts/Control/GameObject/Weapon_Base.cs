@@ -84,7 +84,7 @@ namespace Slap
                 var bullet = GameObjectLoader.Load(bulletPre, bulletParent);
                 bullet.transform.position = fireTrans.position;
 
-                bullet.GetComponent<Bullet>()?.Init(bulletIcon, damage, aimCampTrans, speed, aimCamp, size);
+                bullet.GetComponent<Bullet>()?.Init(bulletIcon, damage, aimCampTrans, speed, aimCamp, size, hitEffect);
             }
         }        
 

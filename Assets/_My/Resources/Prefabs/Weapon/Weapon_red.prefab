@@ -131,4 +131,5 @@ MonoBehaviour:
   bulletIcon: {fileID: 21300000, guid: 7943a1685af23ec4eb061e51048722c4, type: 3}
   speed: 0.2
   size: 1
+  hitEffect: {fileID: 2393111809793729749, guid: 05609566f0df27848962c113cb77d33c, type: 3}
   aimSmoothSpeed: 4

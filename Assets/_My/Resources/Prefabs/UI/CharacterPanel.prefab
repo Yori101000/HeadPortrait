@@ -72,6 +72,41 @@ RectTransform:
   m_AnchoredPosition: {x: -264, y: -389}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &3084871018190348174
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1599751474626276309}
+  m_Layer: 5
+  m_Name: HitEffectParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1599751474626276309
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3084871018190348174}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6115506956425774013}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5767006405819889910
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,6 +143,7 @@ RectTransform:
   - {fileID: 3168820343414117550}
   - {fileID: 7783991022611867662}
   - {fileID: 6071609641406053292}
+  - {fileID: 1599751474626276309}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -195,7 +231,7 @@ MonoBehaviour:
     scriptNamespace: Slap.UI
     createName: Yuki
     createEmail: 1274672030@qq.com
-    systemNowTime: 2025/7/12 17:22:41
+    systemNowTime: 2025/7/14 17:29:45
     description: "\u8FD9\u662F\u4E00\u4E2A\u6846\u67B6\u5DE5\u5177\u521B\u5EFA\u7684\u811A\u672C"
     onLoading: 0
     isFolderCreateScripts: 1

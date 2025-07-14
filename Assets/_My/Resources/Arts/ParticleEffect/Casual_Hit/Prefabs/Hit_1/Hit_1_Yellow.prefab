@@ -19590,6 +19590,7 @@ GameObject:
   - component: {fileID: 4163288609089604275}
   - component: {fileID: 5211808557863950559}
   - component: {fileID: 3341061396884844553}
+  - component: {fileID: -4251730978999237812}
   m_Layer: 0
   m_Name: Hit_1_Yellow
   m_TagString: Untagged
@@ -19607,7 +19608,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2071394089543515477}
@@ -24472,6 +24473,19 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-4251730978999237812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7059244812680251311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bb491156ca5cf344a53477deb548e75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0.5
 --- !u!1 &7974061529115862812
 GameObject:
   m_ObjectHideFlags: 0

@@ -461,6 +461,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3742690590381063169, guid: 13f79be78b044d8419acf0379bb10647, type: 3}
+      propertyPath: Data.systemNowTime
+      value: 2025/7/14 18:59:27
+      objectReference: {fileID: 0}
+    - target: {fileID: 3742690590381063169, guid: 13f79be78b044d8419acf0379bb10647, type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 3742690590381063169, guid: 13f79be78b044d8419acf0379bb10647, type: 3}
@@ -547,6 +551,22 @@ PrefabInstance:
     - target: {fileID: 7499632867048592747, guid: 13f79be78b044d8419acf0379bb10647, type: 3}
       propertyPath: m_Name
       value: MainMenuPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7499632867048592747, guid: 13f79be78b044d8419acf0379bb10647, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8895080120728138872, guid: 13f79be78b044d8419acf0379bb10647, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8895080120728138872, guid: 13f79be78b044d8419acf0379bb10647, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8895080120728138872, guid: 13f79be78b044d8419acf0379bb10647, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
