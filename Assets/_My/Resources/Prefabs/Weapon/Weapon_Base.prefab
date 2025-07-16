@@ -127,9 +127,9 @@ MonoBehaviour:
   bulletPre: {fileID: 8355243150702818152, guid: 88fb897cb1fbc2c469f69172e634c71c, type: 3}
   fireTrans: {fileID: 6130101340151400325}
   damage: 10
-  attackInterval: 0.2
+  attackInterval: 1
   bulletIcon: {fileID: 21300000, guid: 9b7b733381ce08d49bfa57bf33e62a4e, type: 3}
-  speed: 0.4
+  speed: 1
   size: 1
   hitEffect: {fileID: 1114292188611296962, guid: 6b390d1f5879f3e47a3dbd64152ab32b, type: 3}
   aimSmoothSpeed: 4

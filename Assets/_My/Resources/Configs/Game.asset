@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22aa4b760cf7414bb2626fb352c2bc2, type: 3}
   m_Name: Game
   m_EditorClassIdentifier: 
-  viewPosition: {x: -64.8, y: -120, z: 0}
-  viewScale: {x: 0.65751624, y: 0.65751624, z: 1}
+  viewPosition: {x: -24.8, y: -99.99999, z: 0}
+  viewScale: {x: 0.49717674, y: 0.49717674, z: 1}
   runtime_GUID: 
   all_runtime_States:
     list:
@@ -91,8 +91,8 @@ MonoBehaviour:
         upMachineName: 
         position:
           serializedVersion: 2
-          x: 0
-          y: 300
+          x: -80
+          y: 280
           width: 200
           height: 40
       - parentStateMachineName: Game
@@ -105,8 +105,8 @@ MonoBehaviour:
         upMachineName: 
         position:
           serializedVersion: 2
-          x: 0
-          y: 100
+          x: 640
+          y: 180
           width: 200
           height: 40
       - parentStateMachineName: Game
@@ -136,23 +136,7 @@ MonoBehaviour:
         position:
           serializedVersion: 2
           x: 340
-          y: 180
-          width: 200
-          height: 40
-      - parentStateMachineName: Game
-        name: Gaming
-        behaviourInfos:
-        - typeName: Slap.GamingState
-          guid: 24a51065e8e6ade4f9ea10dcc18fcb0f
-        isBuildInitState: 0
-        buildStateName: 
-        IsSubStateMachine: 0
-        IsDefaultState: 0
-        upMachineName: 
-        position:
-          serializedVersion: 2
-          x: 340
-          y: 260
+          y: 280
           width: 200
           height: 40
       - parentStateMachineName: Game
@@ -168,7 +152,23 @@ MonoBehaviour:
         position:
           serializedVersion: 2
           x: 340
-          y: 420
+          y: 600
+          width: 200
+          height: 40
+      - parentStateMachineName: Game
+        name: GamingState
+        behaviourInfos:
+        - typeName: Slap.GamingState
+          guid: 24a51065e8e6ade4f9ea10dcc18fcb0f
+        isBuildInitState: 0
+        buildStateName: 
+        IsSubStateMachine: 0
+        IsDefaultState: 0
+        upMachineName: 
+        position:
+          serializedVersion: 2
+          x: 340
+          y: 440
           width: 200
           height: 40
   all_runtime_Transitions:
@@ -179,9 +179,9 @@ MonoBehaviour:
         toStateName: Game
         autoSwitch: 0
         conditions:
-        - targetValue: 0
+        - targetValue: 1
           parameterName: GameState
-          compareType: 0
+          compareType: 2
       - fromStateName: Game
         toStateName: MainMenu
         autoSwitch: 0
@@ -192,26 +192,27 @@ MonoBehaviour:
     - _key: Game
       _value:
       - fromStateName: WaitStart
-        toStateName: Gaming
+        toStateName: GamingState
         autoSwitch: 0
-        conditions:
-        - targetValue: 1
-          parameterName: GameState
-          compareType: 0
-      - fromStateName: Gaming
+        conditions: []
+      - fromStateName: GamingState
         toStateName: End
         autoSwitch: 0
         conditions:
-        - targetValue: 2
+        - targetValue: 3
           parameterName: GameState
-          compareType: 0
+          compareType: 2
   all_runtime_parameters:
   - parameterName: GameState
+    Parameter:
+      value: 0
+    parameterType: 1
+  - parameterName: CampNum
     Parameter:
       value: 0
     parameterType: 1
   SelectLayers: []
   openGenerator: 1
   nameSpace: Slap
-  className: EndState
+  className: GamingState
   path: Assets/_My/Scripts/Control/GameState

@@ -10,11 +10,13 @@ using YukiFrameWork.UI;
 using UnityEngine;
 using YukiFrameWork;
 using UnityEngine.UI;
+using UnityEditor.Purchasing;
+using UnityEngine.Events;
 namespace Slap.UI
 {
 	public partial class TestPanel : BasePanel
 	{
-
+		public void OnClickTest(UnityAction action) => Test.GetComponent<Button>().AddListenerPure(action);
 
 	}
 }

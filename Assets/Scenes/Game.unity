@@ -1255,22 +1255,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1561363950}
     m_Modifications:
-    - target: {fileID: 2778043167321246543, guid: bde5c040399714542a24274f2ad3f2f6, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3096027674361786334, guid: bde5c040399714542a24274f2ad3f2f6, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 230.85999
-      objectReference: {fileID: 0}
-    - target: {fileID: 4451915875958604994, guid: bde5c040399714542a24274f2ad3f2f6, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5815308347125149030, guid: bde5c040399714542a24274f2ad3f2f6, type: 3}
-      propertyPath: Data.systemNowTime
-      value: 2025/7/10 14:10:37
-      objectReference: {fileID: 0}
     - target: {fileID: 5815308347125149030, guid: bde5c040399714542a24274f2ad3f2f6, type: 3}
       propertyPath: serializationData.Prefab
       value: 
@@ -1306,14 +1290,6 @@ PrefabInstance:
     - target: {fileID: 6382263440022364490, guid: bde5c040399714542a24274f2ad3f2f6, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7038461673822611772, guid: bde5c040399714542a24274f2ad3f2f6, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8315589006918791166, guid: bde5c040399714542a24274f2ad3f2f6, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8412247026175603516, guid: bde5c040399714542a24274f2ad3f2f6, type: 3}
       propertyPath: m_Pivot.x
@@ -1398,10 +1374,6 @@ PrefabInstance:
     - target: {fileID: 8901011189514301366, guid: bde5c040399714542a24274f2ad3f2f6, type: 3}
       propertyPath: m_Name
       value: TestPanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 8901011189514301366, guid: bde5c040399714542a24274f2ad3f2f6, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

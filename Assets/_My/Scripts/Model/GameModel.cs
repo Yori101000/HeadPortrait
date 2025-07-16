@@ -14,12 +14,18 @@ namespace Slap
     [Registration(typeof(Slap.Push))]
     public class GameModel : AbstractModel
     {
-        public string PKModel{ get; set; }  //游戏模式，确定是几个人在玩
+        public PKMode pkMode{ get; set; }  //游戏模式，确定是几个人在玩
         public override void Init()
         {
 
         }
 
+        public enum PKMode
+        {
+            Twosome,
+            Threesome,
+            Foursome
+        }
 
     }
 }

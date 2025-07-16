@@ -1428,6 +1428,7 @@ GameObject:
   - component: {fileID: 708873384282823920}
   - component: {fileID: 4532184263816136768}
   - component: {fileID: -1908127361744750107}
+  - component: {fileID: 4335557649108990781}
   m_Layer: 5
   m_Name: Camp
   m_TagString: Camp
@@ -1532,7 +1533,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b3a33b5acced034592903a1a900f63f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveDuration: 1.5
+  maxScaleMultiplier: 1.03
+  breathSpeed: 2
+  health: 0
   aimCamp: 4
+--- !u!95 &4335557649108990781
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7054743615238781349}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 226335d442fda0e468b4abcbc5626a7d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7538779000417825686
 GameObject:
   m_ObjectHideFlags: 0

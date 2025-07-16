@@ -126,10 +126,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPre: {fileID: 8355243150702818152, guid: 88fb897cb1fbc2c469f69172e634c71c, type: 3}
   fireTrans: {fileID: 5195218119413856009}
-  damage: 0
-  attackInterval: 0.2
+  damage: 10
+  attackInterval: 1
   bulletIcon: {fileID: 21300000, guid: 7943a1685af23ec4eb061e51048722c4, type: 3}
-  speed: 0.2
-  size: 1
-  hitEffect: {fileID: 2393111809793729749, guid: 05609566f0df27848962c113cb77d33c, type: 3}
+  speed: 1
+  size: 2
+  hitEffect: {fileID: 3630950076977652491, guid: d0ee11761a4137645a9a1b0bd1ea7e53, type: 3}
   aimSmoothSpeed: 4

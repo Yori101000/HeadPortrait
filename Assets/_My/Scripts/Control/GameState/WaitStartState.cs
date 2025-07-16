@@ -16,9 +16,14 @@ namespace Slap
 {
 	public class WaitStartState : StateBehaviour
 	{
+
 		public override void OnEnter()
 		{
-			
+			var globalDataSystem = this.GetSystem<GlobalDataSystem>();
+
+
+			//TODO 制作倒计时
+			 
 		}
 
 	}

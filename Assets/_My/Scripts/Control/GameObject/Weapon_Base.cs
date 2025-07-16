@@ -44,7 +44,7 @@ namespace Slap
         private PlayerData.CampType curCamp = PlayerData.CampType.None;
         // private PlayerData.CampType aimCamp => globalDataSystem.campModel.dic_CampData[curCamp.ToString()].aimCamp;
         private PlayerData.CampType aimCamp = PlayerData.CampType.camp2;
-        private Transform aimCampTrans => globalDataSystem.campModel.dic_CampData[aimCamp.ToString()].transform;
+        private Transform aimCampTrans => globalDataSystem.campModel.dic_camp[aimCamp.ToString()].transform;
         void Start()
         {
             globalDataSystem = this.GetSystem<GlobalDataSystem>();

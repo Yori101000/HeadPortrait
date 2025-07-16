@@ -10,13 +10,16 @@ using YukiFrameWork;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 namespace Slap
 {
     [Registration(typeof(Slap.Push))]
     public class CampModel : AbstractModel
     {
         public int campCount;
-        public Dictionary<string, Camp> dic_CampData = new Dictionary<string, Camp>();
+        public Dictionary<string, Camp> dic_camp = new Dictionary<string, Camp>();
+
+        public List<Camp> list_realCamp = new List<Camp>();
 
         public override void Init()
         {
@@ -25,7 +28,7 @@ namespace Slap
         public int GetAllPoint()
         {
             var allPoint = 0;
-            foreach (var campData in dic_CampData)
+            foreach (var campData in dic_camp)
             {
                 allPoint += campData.Value.point;
             }

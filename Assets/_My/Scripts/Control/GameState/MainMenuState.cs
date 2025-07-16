@@ -25,7 +25,7 @@ namespace Slap
 				UIKit.OpenPanel<LoadingPanel>();
 				//设置加载的最短时间
 				await Task.Delay(1000);
-				SetInt("GameState", (int)GameState.WaitStart);
+				SetInt(ConstModel.StateValue_GameState, (int)GameState.WaitStart);
 			
             });
         }

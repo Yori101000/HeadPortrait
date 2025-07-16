@@ -41,7 +41,7 @@ namespace Slap
 
         public void GetCampNum()
         {
-            var campNum = 2;
+            var campNum = 4;
             //TODO 得到玩家数量
 
             globalDataSystem.campModel.campCount = campNum;

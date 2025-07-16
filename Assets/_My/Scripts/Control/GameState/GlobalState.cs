@@ -10,11 +10,11 @@ using YukiFrameWork.Machine;
 using YukiFrameWork.UI;
 using Slap.UI;
 using YukiFrameWork;
-using System.Transactions;
 using UnityEngine;
 using XFABManager;
 using System.Threading.Tasks;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+using System.Linq;
 // ...existing using...
 
 namespace Slap
@@ -35,7 +35,7 @@ namespace Slap
             // 打开UI面板
             UIKit.OpenPanel<BackGroundPanel>();
             characterPanel = UIKit.OpenPanel<CharacterPanel>();
-            UIKit.OpenPanel<GameUIPanel>();
+            // UIKit.OpenPanel<GameUIPanel>();
             var explainPanel = UIKit.OpenPanel<ExplainPanel>();
             UIKit.OpenPanel<AnimationPanel>();
             UIKit.OpenPanel<PopPanel>();
@@ -121,13 +121,14 @@ namespace Slap
             else
                 globalDataSystem.ReduceHealth(1);
 
-            SetInt("GameState", (int)GameState.End);
+            SetInt(ConstModel.StateValue_GameState, (int)GameState.End);
         }
 
 
+        //全局进行一次初始化
         public async Task InitCamp()
         {
-         
+
             //获取Camp预制体
             var request = Resources.LoadAsync<GameObject>("Prefabs/Camp");
             while (!request.isDone)
@@ -135,40 +136,45 @@ namespace Slap
 
             GameObject campPre = request.asset as GameObject;
 
-            if (globalDataSystem.campModel.campCount == 2)
+            switch (globalDataSystem.campModel.campCount)
             {
-                globalDataSystem.gameModel.PKModel = "双人";
+                case 2:
+                    globalDataSystem.gameModel.pkMode = GameModel.PKMode.Twosome;
+                    break;
+                case 3:
+                    globalDataSystem.gameModel.pkMode = GameModel.PKMode.Threesome;
+                    break;
+                case 4:
+                    globalDataSystem.gameModel.pkMode = GameModel.PKMode.Foursome;
+                    break;
             }
-            else
-            {
 
-            }
+            var mode = characterPanel.transform.Find(globalDataSystem.gameModel.pkMode.ToString());
 
-            characterPanel.transform.Find(globalDataSystem.gameModel.PKModel).gameObject.SetActive(true);
-            var model = characterPanel.transform.Find(globalDataSystem.gameModel.PKModel);
+            Transform[] campParents = new Transform[mode.childCount];
 
-            Transform[] campParents = new Transform[model.childCount];
+            for (int i = 0; i < mode.childCount; i++)
+                campParents[i] = mode.GetChild(i);
 
-            for (int i = 0; i < model.childCount; i++)
-                campParents[i] = model.GetChild(i);
 
+            //初始化阵营数据(CampModel)
             for (int i = 0; i < campParents.Length; i++)
             {
-                //初始化阵营数据
                 GameObject campObj = GameObjectLoader.Load(campPre, campParents[i]);
                 campObj.name = $"Camp_{i}";
                 Camp camp = campObj.GetComponent<Camp>();
                 camp.Init((PlayerData.CampType)i);
 
 
-                globalDataSystem.campModel.dic_CampData.Add(((PlayerData.CampType)i).ToString(), camp);
+                globalDataSystem.campModel.dic_camp.Add(((PlayerData.CampType)i).ToString(), camp);
                 characterPanel.list_WeaponParent.Add(camp.Find("WeaponParent").transform);
             }
+            globalDataSystem.campModel.list_realCamp = globalDataSystem.campModel.dic_camp.OrderByDescending(c => c.Value.health).Select(c => c.Value).ToList();
 
             //额外 无阵营
             GameObject noneCamp = new GameObject("None");
-            noneCamp.SetParent(model);
-            globalDataSystem.campModel.dic_CampData.Add(PlayerData.CampType.None.ToString(), noneCamp.AddComponent<Camp>());
+            noneCamp.SetParent(mode);
+            globalDataSystem.campModel.dic_camp.Add(PlayerData.CampType.None.ToString(), noneCamp.AddComponent<Camp>());
         }
     }
 }

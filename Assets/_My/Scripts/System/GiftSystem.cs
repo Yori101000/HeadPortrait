@@ -246,7 +246,7 @@ namespace Slap
         {
             bool isAddBullet = false;
 
-            var campWeapons = globalDataSystem.campModel.dic_CampData[playerData.userCamp.ToString()].list_Weapon;
+            var campWeapons = globalDataSystem.campModel.dic_camp[playerData.userCamp.ToString()].list_Weapon;
 
             //检查当前阵营中是否有放武器的位置
             foreach (var curWeapon in campWeapons)
@@ -269,7 +269,7 @@ namespace Slap
             void CreateWeapon()
             {
                 int emptyIndex = campWeapons.FindIndex(w => w == null);
-                if (emptyIndex != -1 && emptyIndex < globalDataSystem.campModel.dic_CampData[playerData.userCamp.ToString()].maxWeapon)
+                if (emptyIndex != -1 && emptyIndex < globalDataSystem.campModel.dic_camp[playerData.userCamp.ToString()].maxWeapon)
                 {
 
                     //创建物体，分配位置， 记录数据
