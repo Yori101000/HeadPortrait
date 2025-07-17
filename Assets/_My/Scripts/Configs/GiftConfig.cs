@@ -44,14 +44,15 @@ namespace Slap
     {
         //位置在道具动画中处理
         //道具预制体
-        public GameObject WeaponPre;
+        public GameObject propPre;
+        
         public int propCount;
         public PropType type;
 
         public enum PropType
         {
             Weapon,
-            Prop
+            ThrowableProp
         }
     }
 

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22aa4b760cf7414bb2626fb352c2bc2, type: 3}
   m_Name: Game
   m_EditorClassIdentifier: 
-  viewPosition: {x: -24.8, y: -99.99999, z: 0}
-  viewScale: {x: 0.49717674, y: 0.49717674, z: 1}
+  viewPosition: {x: -225.6, y: -142.4, z: 0}
+  viewScale: {x: 0.8695652, y: 0.8695652, z: 1}
   runtime_GUID: 
   all_runtime_States:
     list:

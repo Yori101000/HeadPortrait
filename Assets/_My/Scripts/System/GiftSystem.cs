@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Slap.UI;
 using YukiFrameWork.UI;
 using XFABManager;
+using UnityEditor.Rendering;
 
 
 namespace Slap
@@ -21,6 +22,9 @@ namespace Slap
     [Registration(typeof(Slap.Push))]
     public class GiftSystem : AbstractSystem
     {
+        //常量
+        private const string PropParentName = "PropParent";
+
 
         #region  弹窗
         //左侧弹窗
@@ -34,6 +38,7 @@ namespace Slap
         #endregion
 
         //道具
+        private Transform _propParent;
         private List<GameObject> list_Prop;
 
         #region 动画
@@ -71,7 +76,7 @@ namespace Slap
             que_LeftPlayGiftAnimation = new Queue<PlayGiftAnimationData>();
             que_RightPlayGiftAnimation = new Queue<PlayGiftAnimationData>();
 
-            
+
         }
 
         public void Start()
@@ -84,6 +89,7 @@ namespace Slap
             animationPanel = UIKit.GetPanel<AnimationPanel>();
             globalDataSystem = this.GetSystem<GlobalDataSystem>();
 
+            _propParent = characterPanel.Find(PropParentName);
         }
         public void End()
         {
@@ -222,24 +228,40 @@ namespace Slap
 
         private void SpawnProp(PlayerData playerData, GiftPropData propData)
         {
-            if (propData.WeaponPre == null)
+            if (propData.propPre == null)
             {
                 Debug.Log("该礼物没有具体道具");
                 return;
             }
-                //进行道具判断
-                if (propData.type == GiftPropData.PropType.Prop)
-                {
-                    GameObject prop = null;
-                    //TODO 道具处理
+            //进行道具判断
+            if (propData.type == GiftPropData.PropType.ThrowableProp)
+                MonoHelper.Instance.StartCoroutine(HandleProp(playerData, propData));
+            else
+                HandleWeapon(playerData, propData);
+        }
+        // 道具处理
+        private IEnumerator HandleProp(PlayerData playerData, GiftPropData propData)
+        {
+            //找到当前阵营
+            var curCamp = globalDataSystem.campModel.dic_camp[playerData.userCamp.ToString()];
+            var targetCamp = globalDataSystem.campModel.dic_camp[curCamp.aimCamp.ToString()];
 
-                    list_Prop.Add(prop);
-                }
-                else
-                {
-                    HandleWeapon(playerData, propData);
-                }
+            Transform startTrans = curCamp.LeftPropPoint;
 
+            //生成指定数量的道具
+            for (int i = 0; i < propData.propCount; i++)
+            {
+                var propObj = GameObjectLoader.Load(propData.propPre, _propParent.transform);
+                var prop = propObj.GetComponent<ThrowableProp>();
+                //初始化道具（之后道具自己管理自己）
+                prop.Init(curCamp, targetCamp);
+
+                //更换发射位置
+                startTrans = startTrans == curCamp.RightPropPoint ? curCamp.LeftPropPoint : curCamp.RightPropPoint;
+
+                list_Prop.Add(propObj);
+                yield return new WaitForSeconds(0.1f);
+            }
         }
 
         private void HandleWeapon(PlayerData playerData, GiftPropData propData)
@@ -254,9 +276,9 @@ namespace Slap
                 //当前阵营武器为空，则跳过
                 if (curWeapon == null)
                     continue;
-                if (curWeapon.name == propData.WeaponPre.name)
+                if (curWeapon.name == propData.propPre.name)
                 {
-                    
+
                     isAddBullet = true;
                     curWeapon.GetComponent<Weapon_Base>().bulletCount += propData.propCount;
                     //TODO 更新武器UI子弹数量
@@ -274,23 +296,22 @@ namespace Slap
 
                     //创建物体，分配位置， 记录数据
                     Transform weaponParent = characterPanel.GetWeaponParent((int)playerData.userCamp, emptyIndex);
-                    
-                    GameObject prop = GameObjectLoader.Load(propData.WeaponPre, weaponParent);
+
+                    GameObject prop = GameObjectLoader.Load(propData.propPre, weaponParent);
                     //设置物体
-                    prop.name = propData.WeaponPre.name;
+                    prop.name = propData.propPre.name;
                     prop.GetComponent<Weapon_Base>()?.Init(playerData.userCamp);
 
                     campWeapons[emptyIndex] = prop;
-                    // globalDataSystem.campModel.dic_CampData[playerData.userCamp.ToString()].list_Weapon.Add(prop);
                     list_Prop.Add(prop);
-                    
+
                 }
                 else
                 {
                     Debug.LogError("超出范围");
                 }
             }
-            
+
         }
 
 

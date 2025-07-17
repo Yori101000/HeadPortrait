@@ -21,6 +21,10 @@ namespace Slap
         //常量
         //动画名
         private const string AnimationName_BeHurt = "BeHurt";
+        //物体名
+        private const string ObjName_LeftPropPoint = "LeftThrowPropPoint";
+        private const string ObjName_RightPropPoint = "RightThrowPropPoint";
+
 
         [Header("放大设置")]
         private Vector3 originalScale;  //当前实际的基础大小
@@ -34,19 +38,25 @@ namespace Slap
         [SerializeField] private float maxScaleMultiplier = 1.05f;
         [SerializeField] private float breathSpeed = 2f;
 
-        private Coroutine _curMoveCoroutine;
 
-        private Animator _animator;
-
-
-        public bool hasDead { get; set; } = false;
+        [Header("状态")]
         public int health;
+        public bool hasDead { get; set; } = false;
         public int point { get; set; } = 0;      //当前阵容积分
         public int winPoint { get; set; } = 0;  //当前阵容胜点
         public int maxWeapon { get; private set; } = 6;
-        public PlayerData.CampType aimCamp = PlayerData.CampType.None;
+        // public PlayerData.CampType aimCamp = PlayerData.CampType.None;
+        public PlayerData.CampType aimCamp => PlayerData.CampType.camp1;
         public List<GameObject> list_Weapon { get; set; }
         public PlayerData.CampType campType { get; private set; } = PlayerData.CampType.None;
+
+    
+        public Transform LeftPropPoint { get; set; }
+        public Transform RightPropPoint { get; set; }
+
+        private Animator _animator;
+
+        private Coroutine _curMoveCoroutine;
 
         public void Init(PlayerData.CampType _campType)
         {
@@ -64,8 +74,10 @@ namespace Slap
         void Awake()
         {
             _animator = GetComponent<Animator>();
+            
+            LeftPropPoint = transform.Find(ObjName_LeftPropPoint)?.transform;
+            RightPropPoint = transform.Find(ObjName_RightPropPoint)?.transform;
         }
-
         void Update()
         {
             PlayerBreathEffect();
@@ -102,7 +114,6 @@ namespace Slap
             float timer = 0f;
             while (timer < moveDuration)
             {
-                Debug.Log($"{name} 正在移动");
                 float t = timer / moveDuration;
 
                 // 二次贝塞尔插值公式

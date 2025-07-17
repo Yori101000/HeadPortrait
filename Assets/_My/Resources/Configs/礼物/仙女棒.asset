@@ -36,41 +36,27 @@ MonoBehaviour:
     giftIcon: {fileID: 21300000, guid: bf83ea63430999046a5fad286257a652, type: 3}
     number: 1314
   propDatas:
-  - WeaponPre: {fileID: 8225503903390221771, guid: b9a73a369101124448c711c0c3a02a53, type: 3}
-    duration: 5
+  - propPre: {fileID: 8225503903390221771, guid: b9a73a369101124448c711c0c3a02a53, type: 3}
+    propCount: 0
     type: 0
-    baseScore: 0
-    point: 0
-  - WeaponPre: {fileID: 0}
-    duration: 0
+  - propPre: {fileID: 0}
+    propCount: 0
     type: 0
-    baseScore: 0
-    point: 0
-  - WeaponPre: {fileID: 0}
-    duration: 0
+  - propPre: {fileID: 0}
+    propCount: 0
     type: 0
-    baseScore: 0
-    point: 0
-  - WeaponPre: {fileID: 0}
-    duration: 0
+  - propPre: {fileID: 0}
+    propCount: 0
     type: 0
-    baseScore: 0
-    point: 0
-  - WeaponPre: {fileID: 0}
-    duration: 0
+  - propPre: {fileID: 0}
+    propCount: 0
     type: 0
-    baseScore: 0
-    point: 0
-  - WeaponPre: {fileID: 0}
-    duration: 0
+  - propPre: {fileID: 0}
+    propCount: 0
     type: 0
-    baseScore: 0
-    point: 0
-  - WeaponPre: {fileID: 0}
-    duration: 0
+  - propPre: {fileID: 0}
+    propCount: 0
     type: 0
-    baseScore: 0
-    point: 0
   animtionDatas:
   - AnimationName: 
     type: 0
@@ -86,3 +72,25 @@ MonoBehaviour:
     type: 0
   - AnimationName: 
     type: 0
+  scoreDatas:
+  - baseScore: 0
+    point: 0
+    duration: 0
+  - baseScore: 0
+    point: 0
+    duration: 0
+  - baseScore: 0
+    point: 0
+    duration: 0
+  - baseScore: 0
+    point: 0
+    duration: 0
+  - baseScore: 0
+    point: 0
+    duration: 0
+  - baseScore: 0
+    point: 0
+    duration: 0
+  - baseScore: 0
+    point: 0
+    duration: 0

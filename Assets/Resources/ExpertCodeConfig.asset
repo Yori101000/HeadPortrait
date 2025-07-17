@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NameSpace: Slap
   FoldPath: Assets/_My/Scripts/Control/GameObject
-  Name: HitEffect
+  Name: ThrowableProp
   ParentType: 6
   levelInterface: 0
   customInterface: 0
