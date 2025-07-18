@@ -17,9 +17,9 @@ namespace Slap
     public class CampModel : AbstractModel
     {
         public int campCount;
-        public Dictionary<string, Camp> dic_camp = new Dictionary<string, Camp>();
+        public Dictionary<string, Camp> dic_Camp = new Dictionary<string, Camp>();
 
-        public List<Camp> list_realCamp = new List<Camp>();
+        public List<Camp> list_RealCamp = new List<Camp>();
 
         public override void Init()
         {
@@ -28,7 +28,7 @@ namespace Slap
         public int GetAllPoint()
         {
             var allPoint = 0;
-            foreach (var campData in dic_camp)
+            foreach (var campData in dic_Camp)
             {
                 allPoint += campData.Value.point;
             }

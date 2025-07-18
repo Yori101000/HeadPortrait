@@ -74,7 +74,6 @@ namespace Slap
     public class GiftScoreData
     {
         public int baseScore;
-        public int point;
         public float duration;
     }
 

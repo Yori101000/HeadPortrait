@@ -6,14 +6,9 @@
 /// -  (C) Copyright 2008 - 2025
 /// -  All Rights Reserved.
 ///=====================================================
-using YukiFrameWork;
 using UnityEngine;
-using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using System.Collections;
-using UnityEngine.Video;
-using UnityEngine.Rendering;
 namespace Slap
 {
     public class Camp : MonoBehaviour
@@ -45,8 +40,7 @@ namespace Slap
         public int point { get; set; } = 0;      //当前阵容积分
         public int winPoint { get; set; } = 0;  //当前阵容胜点
         public int maxWeapon { get; private set; } = 6;
-        // public PlayerData.CampType aimCamp = PlayerData.CampType.None;
-        public PlayerData.CampType aimCamp => PlayerData.CampType.camp1;
+        public PlayerData.CampType aimCamp = PlayerData.CampType.None;
         public List<GameObject> list_Weapon { get; set; }
         public PlayerData.CampType campType { get; private set; } = PlayerData.CampType.None;
 

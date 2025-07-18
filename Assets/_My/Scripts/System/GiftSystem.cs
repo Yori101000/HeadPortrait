@@ -239,36 +239,81 @@ namespace Slap
             else
                 HandleWeapon(playerData, propData);
         }
-        // 道具处理
+        // // 道具处理
+        // private IEnumerator HandleProp(PlayerData playerData, GiftPropData propData)
+        // {
+        //     Camp curCamp = globalDataSystem.campModel.dic_Camp[playerData.userCamp.ToString()];; 
+        //     Camp targetCamp = globalDataSystem.campModel.dic_Camp[curCamp.aimCamp.ToString()];
+        //     Transform startTrans = curCamp.LeftPropPoint;
+
+        //     while (globalDataSystem.campModel.dic_Camp[playerData.userCamp.ToString()].aimCamp == PlayerData.CampType.None)
+        //     {
+        //         //找到当前阵营
+        //         curCamp = globalDataSystem.campModel.dic_Camp[playerData.userCamp.ToString()];
+        //         targetCamp = globalDataSystem.campModel.dic_Camp[curCamp.aimCamp.ToString()];
+
+        //         startTrans = curCamp.LeftPropPoint;
+
+        //         yield return null;
+        //     }
+
+        //     //生成指定数量的道具
+        //     for (int i = 0; i < propData.propCount; i++)
+        //     {
+        //         var propObj = GameObjectLoader.Load(propData.propPre, _propParent.transform);
+        //         var prop = propObj.GetComponent<ThrowableProp>();
+        //         //初始化道具（之后道具自己管理自己）
+        //         prop.Init(curCamp, targetCamp);
+
+        //         //更换发射位置
+        //         startTrans = startTrans == curCamp.RightPropPoint ? curCamp.LeftPropPoint : curCamp.RightPropPoint;
+
+        //         list_Prop.Add(propObj);
+        //         yield return new WaitForSeconds(0.1f);
+        //     }
+        // }
+        
+        //TODO ???存疑
         private IEnumerator HandleProp(PlayerData playerData, GiftPropData propData)
         {
-            //找到当前阵营
-            var curCamp = globalDataSystem.campModel.dic_camp[playerData.userCamp.ToString()];
-            var targetCamp = globalDataSystem.campModel.dic_camp[curCamp.aimCamp.ToString()];
+            Transform startTrans = GetCurCamp().LeftPropPoint;
 
-            Transform startTrans = curCamp.LeftPropPoint;
+            // 等待目标阵营出现
+            while (GetCurCamp().aimCamp == PlayerData.CampType.None)
+                yield return null;
 
-            //生成指定数量的道具
             for (int i = 0; i < propData.propCount; i++)
             {
+                var curCamp = GetCurCamp();         // 每次获取最新的
+                var targetCamp = GetTargetCamp();   // 每次获取最新的
+
+                // 生成道具
                 var propObj = GameObjectLoader.Load(propData.propPre, _propParent.transform);
                 var prop = propObj.GetComponent<ThrowableProp>();
-                //初始化道具（之后道具自己管理自己）
+
+                // 初始化道具
                 prop.Init(curCamp, targetCamp);
 
-                //更换发射位置
-                startTrans = startTrans == curCamp.RightPropPoint ? curCamp.LeftPropPoint : curCamp.RightPropPoint;
+                // 更换发射点
+                startTrans = (startTrans == curCamp.RightPropPoint) ? curCamp.LeftPropPoint : curCamp.RightPropPoint;
 
                 list_Prop.Add(propObj);
                 yield return new WaitForSeconds(0.1f);
             }
+
+            // 局部函数，实时获取
+            Camp GetCurCamp() =>
+                globalDataSystem.campModel.dic_Camp[playerData.userCamp.ToString()];
+
+            Camp GetTargetCamp() =>
+                globalDataSystem.campModel.dic_Camp[GetCurCamp().aimCamp.ToString()];
         }
 
         private void HandleWeapon(PlayerData playerData, GiftPropData propData)
         {
             bool isAddBullet = false;
 
-            var campWeapons = globalDataSystem.campModel.dic_camp[playerData.userCamp.ToString()].list_Weapon;
+            var campWeapons = globalDataSystem.campModel.dic_Camp[playerData.userCamp.ToString()].list_Weapon;
 
             //检查当前阵营中是否有放武器的位置
             foreach (var curWeapon in campWeapons)
@@ -291,7 +336,7 @@ namespace Slap
             void CreateWeapon()
             {
                 int emptyIndex = campWeapons.FindIndex(w => w == null);
-                if (emptyIndex != -1 && emptyIndex < globalDataSystem.campModel.dic_camp[playerData.userCamp.ToString()].maxWeapon)
+                if (emptyIndex != -1 && emptyIndex < globalDataSystem.campModel.dic_Camp[playerData.userCamp.ToString()].maxWeapon)
                 {
 
                     //创建物体，分配位置， 记录数据

@@ -41,9 +41,11 @@ namespace Slap
 
             //处理坐标
             transform.position = curCamp.transform.position;
+            //TODO 更换开始点位
             startPos = transform.position;
 
             _campType = curCamp.campType;
+
 
             //TODO 优化道具曲线
             // 控制点：决定轨迹的弯曲方向

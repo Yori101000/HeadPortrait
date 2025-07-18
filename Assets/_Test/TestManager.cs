@@ -12,9 +12,10 @@ using TMPro;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 namespace Slap.Test
 {
-   public class TestManager : MonoBehaviour,IController
+    public class TestManager : MonoBehaviour, IController
     {
         public static TestManager Instance;
         #region  UI组件
@@ -31,9 +32,12 @@ namespace Slap.Test
         GiftSystem giftSystem;
         public PlayerData curPlayer;
 
+        // 命令处理映射表
+        private Dictionary<Regex, Action<string>> commandHandlers;
+
         void Awake()
         {
-            if(Instance == null)
+            if (Instance == null)
                 Instance = this;
             else
                 Destroy(gameObject);
@@ -47,6 +51,26 @@ namespace Slap.Test
             ipf_userSelect.onSubmit.AddListener(OnUserSelect);
             globalDataSystem = this.GetSystem<GlobalDataSystem>();
             giftSystem = this.GetSystem<GiftSystem>();
+
+            InitCommandHandlers();
+        }
+
+        //初始化命令库
+        void InitCommandHandlers()
+        {
+            commandHandlers = new Dictionary<Regex, Action<string>>()
+                {
+                    { new Regex(@"^6+$"), HandleLikeInput },
+                    { new Regex(@"^加1$", RegexOptions.IgnoreCase), value => HandleJoinCamp(value, PlayerData.CampType.camp1) },
+                    { new Regex(@"^加2$", RegexOptions.IgnoreCase), value => HandleJoinCamp(value, PlayerData.CampType.camp2) },
+                    { new Regex(@"^加3$", RegexOptions.IgnoreCase), value => HandleJoinCamp(value, PlayerData.CampType.camp3) },
+                    { new Regex(@"^加4$", RegexOptions.IgnoreCase), value => HandleJoinCamp(value, PlayerData.CampType.camp4) },
+
+                    { new Regex(@"^攻击1$", RegexOptions.IgnoreCase), value => HandleAttack(value, PlayerData.CampType.camp1) },
+                    { new Regex(@"^攻击2$", RegexOptions.IgnoreCase), value => HandleAttack(value, PlayerData.CampType.camp2) },
+                    { new Regex(@"^攻击3$", RegexOptions.IgnoreCase), value => HandleAttack(value, PlayerData.CampType.camp3) },
+                    { new Regex(@"^攻击4$", RegexOptions.IgnoreCase), value => HandleAttack(value, PlayerData.CampType.camp4) },
+                };
         }
 
 
@@ -61,29 +85,37 @@ namespace Slap.Test
 
             Debug.Log($"用户输入: {value}");
 
-            //检测输入，并进行相应处理
-            if (Regex.IsMatch(value, @"^1+$"))
+
+            //检测指令输入
+            foreach (var kvp in commandHandlers)
             {
-                // 进行分配
-                if (globalDataSystem.AllotPlayerToCamp(curPlayer, PlayerData.CampType.camp1))
-                    Debug.Log($"玩家 {curPlayer.userName} 分配成功，阵营为红色");
-                else
-                    Debug.LogWarning($"玩家 {curPlayer.userName} 创建失败");
+                var regex = kvp.Key;
+                var action = kvp.Value;
+                if (regex.IsMatch(value))
+                {
+                    action.Invoke(value);
+                    return;
+                }
             }
-            if (Regex.IsMatch(value, @"^2+$"))
-            {
-                // 进行分配
-                if (globalDataSystem.AllotPlayerToCamp(curPlayer, PlayerData.CampType.camp2))
-                    Debug.Log($"玩家 {curPlayer.userName} 分配成功，阵营为蓝色");
-                else
-                    Debug.LogWarning($"玩家 {curPlayer.userName} 分配失败");
-            }
-            if (Regex.IsMatch(value, @"^6+$"))
-            {
-                if (curPlayer.userCamp == 0)
-                    Debug.Log($"玩家 {curPlayer.userName} 阵营为空，请重新分配");
-                giftSystem.HandleLike(curPlayer, new GiftScoreData { baseScore = 5, duration = 3f});
-            }
+            
+        }
+        private void HandleLikeInput(string value)
+        {
+            if (curPlayer.userCamp == 0)
+                Debug.Log($"玩家 {curPlayer.userName} 阵营为空，请重新分配");
+            giftSystem.HandleLike(curPlayer, new GiftScoreData { baseScore = 5, duration = 3f });
+        }
+        private void HandleJoinCamp(string value, PlayerData.CampType toCamp)
+        {
+            // 进行分配
+            if (globalDataSystem.AllotPlayerToCamp(curPlayer, toCamp))
+                Debug.Log($"玩家 {curPlayer.userName} 分配成功，阵营为{toCamp}");
+            else
+                Debug.LogWarning($"玩家 {curPlayer.userName} 分配失败");
+        }
+        private void HandleAttack(string value, PlayerData.CampType targetCamp)
+        {
+            globalDataSystem.ChangeAttackCamp(curPlayer, targetCamp);
         }
 
         private void OnUserSetWinPoint(string value)
@@ -131,7 +163,7 @@ namespace Slap.Test
             }
             else
                 Debug.LogWarning($"玩家 {value} 不存在");
-            
+
         }
 
         public IArchitecture GetArchitecture()

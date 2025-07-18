@@ -73,24 +73,17 @@ MonoBehaviour:
   - AnimationName: 
     type: 0
   scoreDatas:
+  - baseScore: 1
+    duration: 1
   - baseScore: 0
-    point: 0
     duration: 0
   - baseScore: 0
-    point: 0
     duration: 0
   - baseScore: 0
-    point: 0
     duration: 0
   - baseScore: 0
-    point: 0
     duration: 0
   - baseScore: 0
-    point: 0
     duration: 0
   - baseScore: 0
-    point: 0
-    duration: 0
-  - baseScore: 0
-    point: 0
     duration: 0

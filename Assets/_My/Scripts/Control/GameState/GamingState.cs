@@ -33,7 +33,7 @@ namespace Slap
 		{
 
 			base.OnUpdate();
-			CheckAndFixOrder(globalDataSystem.campModel.list_realCamp);
+			CheckAndFixOrder(globalDataSystem.campModel.list_RealCamp);
 		}
 
 		private void CheckAndFixOrder(List<Camp> list)
@@ -69,7 +69,7 @@ namespace Slap
 			}
 
 			// 更新原列表（注意这里是引用赋值）
-			globalDataSystem.campModel.list_realCamp = sortedList;
+			globalDataSystem.campModel.list_RealCamp = sortedList;
 
 			Debug.Log("已完成排序并重新排列所有阵营位置");
 		}
@@ -91,7 +91,7 @@ namespace Slap
 			for (int i = 0; i < campParents.Length; i++)
 			{
 				// globalDataSystem.campModel.list_camp[i].MoveTo(campParents[i]);
-				globalDataSystem.campModel.dic_camp[((PlayerData.CampType)i).ToString()].MoveTo(campParents[i]);
+				globalDataSystem.campModel.dic_Camp[((PlayerData.CampType)i).ToString()].MoveTo(campParents[i]);
 			}
 
 			//Test

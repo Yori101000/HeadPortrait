@@ -1609,7 +1609,6 @@ MonoBehaviour:
   maxScaleMultiplier: 1.03
   breathSpeed: 2
   health: 0
-  aimCamp: 4
 --- !u!95 &4335557649108990781
 Animator:
   serializedVersion: 5
@@ -1618,7 +1617,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7054743615238781349}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 226335d442fda0e468b4abcbc5626a7d, type: 2}
   m_CullingMode: 0

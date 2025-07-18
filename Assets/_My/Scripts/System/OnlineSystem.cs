@@ -30,7 +30,7 @@ namespace Slap
             globalDataSystem = this.GetSystem<GlobalDataSystem>();
             characterPanel = UIKit.GetPanel<CharacterPanel>();
            
-            GetCampNum();
+            // GetCampNum();
         }
         public void End()
         {
@@ -39,11 +39,10 @@ namespace Slap
 
 
 
-        public void GetCampNum()
+        public void GetCampNum(int campNum)
         {
-            var campNum = 2;
-            //TODO 得到玩家数量
-
+            
+        
             globalDataSystem.campModel.campCount = campNum;
            
         }

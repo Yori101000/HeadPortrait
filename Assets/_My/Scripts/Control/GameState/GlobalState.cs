@@ -94,11 +94,6 @@ namespace Slap
 
             // 播放动画(在动画过程中减少血量)
 
-            //减少血量
-            if (camp == 1)
-                globalDataSystem.ReduceHealth(2);
-            else
-                globalDataSystem.ReduceHealth(1);
 
 
             // 重置阵容数据
@@ -115,11 +110,6 @@ namespace Slap
             giftSystem.Clear(); // 集中销毁所有道具
 
             // 播放OK动画
-
-            if (camp == 1)
-                globalDataSystem.ReduceHealth(2);
-            else
-                globalDataSystem.ReduceHealth(1);
 
             SetInt(ConstModel.StateValue_GameState, (int)GameState.End);
         }
@@ -166,15 +156,15 @@ namespace Slap
                 camp.Init((PlayerData.CampType)i);
 
 
-                globalDataSystem.campModel.dic_camp.Add(((PlayerData.CampType)i).ToString(), camp);
+                globalDataSystem.campModel.dic_Camp.Add(((PlayerData.CampType)i).ToString(), camp);
                 characterPanel.list_WeaponParent.Add(camp.Find("WeaponParent").transform);
             }
-            globalDataSystem.campModel.list_realCamp = globalDataSystem.campModel.dic_camp.OrderByDescending(c => c.Value.health).Select(c => c.Value).ToList();
+            globalDataSystem.campModel.list_RealCamp = globalDataSystem.campModel.dic_Camp.OrderByDescending(c => c.Value.health).Select(c => c.Value).ToList();
 
             //额外 无阵营
             GameObject noneCamp = new GameObject("None");
             noneCamp.SetParent(mode);
-            globalDataSystem.campModel.dic_camp.Add(PlayerData.CampType.None.ToString(), noneCamp.AddComponent<Camp>());
+            globalDataSystem.campModel.dic_Camp.Add(PlayerData.CampType.None.ToString(), noneCamp.AddComponent<Camp>());
         }
     }
 }
