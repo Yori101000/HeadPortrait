@@ -36,23 +36,41 @@ namespace Slap
             UIKit.OpenPanel<BackGroundPanel>();
             characterPanel = UIKit.OpenPanel<CharacterPanel>();
             // UIKit.OpenPanel<GameUIPanel>();
-            var explainPanel = UIKit.OpenPanel<ExplainPanel>();
             UIKit.OpenPanel<AnimationPanel>();
             UIKit.OpenPanel<PopPanel>();
             UIKit.OpenPanel<TestPanel>();
 
-            explainPanel.OnClickClose(() => UIKit.ClosePanel<ExplainPanel>());
+            // 解释面板的打开
+            // var explainPanel = UIKit.OpenPanel<ExplainPanel>();
+            // explainPanel.OnClickClose(() => UIKit.ClosePanel<ExplainPanel>());
 
             // 系统初始化
-            globalDataSystem = this.GetSystem<GlobalDataSystem>();
-            giftSystem = this.GetSystem<GiftSystem>();
-            onlineSystem = this.GetSystem<OnlineSystem>();
+            // globalDataSystem = this.GetSystem<GlobalDataSystem>();
+            // giftSystem = this.GetSystem<GiftSystem>();
+            // onlineSystem = this.GetSystem<OnlineSystem>();
 
-            onlineSystem.Start();
-            globalDataSystem.Start();
-            giftSystem.Start();
+            this.GetSystems<IProjectInitSystem>()
+            .ForEach(system =>
+            {
+                system.Start();
+                //外部就在这
 
-            // 事件绑定
+                if (system is GlobalDataSystem globalDataSystem)
+                {
+                    this.globalDataSystem = globalDataSystem;
+                }
+                else if (system is GiftSystem giftSystem)
+                {
+                    this.giftSystem = giftSystem;
+                }
+                else if (system is OnlineSystem onlineSystem)
+                {
+                    this.onlineSystem = onlineSystem;
+                }
+            });
+
+            
+            // 事件绑定,应该在系统内部做
             globalDataSystem.OnLeftRoundWin += () => OnRoundWin(1);
             globalDataSystem.OnRightRoundWin += () => OnRoundWin(2);
             globalDataSystem.OnLeftWin += () => OnGameWin(1);
@@ -156,15 +174,15 @@ namespace Slap
                 camp.Init((PlayerData.CampType)i);
 
 
-                globalDataSystem.campModel.dic_Camp.Add(((PlayerData.CampType)i).ToString(), camp);
+                globalDataSystem.campModel.Dic_Camp.Add(((PlayerData.CampType)i).ToString(), camp);
                 characterPanel.list_WeaponParent.Add(camp.Find("WeaponParent").transform);
             }
-            globalDataSystem.campModel.list_RealCamp = globalDataSystem.campModel.dic_Camp.OrderByDescending(c => c.Value.health).Select(c => c.Value).ToList();
+            globalDataSystem.campModel.List_RealCamp = globalDataSystem.campModel.Dic_Camp.OrderByDescending(c => c.Value.health).Select(c => c.Value).ToList();
 
             //额外 无阵营
             GameObject noneCamp = new GameObject("None");
             noneCamp.SetParent(mode);
-            globalDataSystem.campModel.dic_Camp.Add(PlayerData.CampType.None.ToString(), noneCamp.AddComponent<Camp>());
+            globalDataSystem.campModel.Dic_Camp.Add(PlayerData.CampType.None.ToString(), noneCamp.AddComponent<Camp>());
         }
     }
 }

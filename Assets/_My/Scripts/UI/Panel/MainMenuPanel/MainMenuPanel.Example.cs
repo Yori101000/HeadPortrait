@@ -10,8 +10,6 @@ namespace Slap.UI
 {
 	public partial class MainMenuPanel
 	{
-		[SerializeField]private UnityEngine.UI.Button Start1;
-		[SerializeField]private UnityEngine.UI.Button Start2;
-		[SerializeField]private UnityEngine.UI.Button Start3;
+		[SerializeField]private UnityEngine.UI.Button Start;
 	}
 }

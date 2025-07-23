@@ -19,7 +19,7 @@ namespace Slap
 
 		public override void OnEnter()
 		{
-			var globalDataSystem = this.GetSystem<GlobalDataSystem>();
+			var globalDataSystem = this.GetSystem<IGlobalDataSystem>() as GlobalDataSystem;
 
 
 			//TODO 制作倒计时

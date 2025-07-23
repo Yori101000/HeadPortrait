@@ -15,8 +15,7 @@ namespace Slap.UI
 {
 	public partial class MainMenuPanel : BasePanel
 	{
-		public void OnClickBtn1(UnityAction action) => Start1.AddListenerPure(action);
-		public void OnClickBtn2(UnityAction action) => Start2.AddListenerPure(action);
-		public void OnClickBtn3(UnityAction action) => Start3.AddListenerPure(action);
+		public void OnClickBtn(UnityAction action) => Start.AddListenerPure(action);
+
 	}
 }

@@ -14,6 +14,7 @@ using YukiFrameWork.UI;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using System.Collections;
 namespace Slap
 {
 	public class GamingState : StateBehaviour
@@ -23,17 +24,18 @@ namespace Slap
 
 		public override void OnEnter()
 		{
-			globalDataSystem = this.GetSystem<GlobalDataSystem>();
+			globalDataSystem = this.GetSystem<IGlobalDataSystem>() as GlobalDataSystem;
 			characterPanel = UIKit.GetPanel<CharacterPanel>();
 
-			UIKit.GetPanel<TestPanel>().OnClickTest(() => { ChangePKMode(globalDataSystem.gameModel.pkMode); });
+			MonoHelper.Instance.StartCoroutine(RegisterCampDeath());
+			
 		}
 
 		public override void OnUpdate()
 		{
 
 			base.OnUpdate();
-			CheckAndFixOrder(globalDataSystem.campModel.list_RealCamp);
+			CheckAndFixOrder(globalDataSystem.campModel.List_RealCamp);
 		}
 
 		private void CheckAndFixOrder(List<Camp> list)
@@ -69,17 +71,30 @@ namespace Slap
 			}
 
 			// 更新原列表（注意这里是引用赋值）
-			globalDataSystem.campModel.list_RealCamp = sortedList;
+			globalDataSystem.campModel.List_RealCamp = sortedList;
 
 			Debug.Log("已完成排序并重新排列所有阵营位置");
 		}
 
-
+		private IEnumerator RegisterCampDeath()
+		{
+			yield return new WaitForSeconds(1);
+			globalDataSystem.OnCampDeath += (t) => { ChangePKMode(globalDataSystem.gameModel.pkMode);};
+		}
 
 
 		//TODO 更换PK模式
 		private void ChangePKMode(GameModel.PKMode curPKMode)
 		{
+			if (curPKMode == GameModel.PKMode.Twosome)
+			{
+				//TODO 优化
+				UIKit.GetPanel<TestPanel>().CampGameOver();
+				// SetInt(ConstModel.StateValue_GameState, 0);
+				Debug.Log("游戏结束");
+				return;
+			}
+
 			var aimPKMode = curPKMode - 1;
 			var aimModeTrans = characterPanel.transform.Find(aimPKMode.ToString());
 
@@ -90,8 +105,7 @@ namespace Slap
 
 			for (int i = 0; i < campParents.Length; i++)
 			{
-				// globalDataSystem.campModel.list_camp[i].MoveTo(campParents[i]);
-				globalDataSystem.campModel.dic_Camp[((PlayerData.CampType)i).ToString()].MoveTo(campParents[i]);
+				globalDataSystem.campModel.List_RealCamp[i].MoveTo(campParents[i]);
 			}
 
 			//Test

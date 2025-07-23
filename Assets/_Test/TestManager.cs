@@ -12,7 +12,9 @@ using TMPro;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+using UnityEngine.UI;
+using YukiFrameWork.UI;
+using Slap.UI;
 namespace Slap.Test
 {
     public class TestManager : MonoBehaviour, IController
@@ -26,11 +28,17 @@ namespace Slap.Test
         public TMP_InputField ipf_userCreate;
         public TMP_InputField ipf_userWinPoint;
         public TMP_InputField ipf_userSelect;
+        public TMP_InputField ipf_giftCounter;
+        public Button btn_userSend;
+        public TMP_Dropdown DD_GiftType;
+        public TMP_Dropdown DD_UserCamp;
+        public TextMeshProUGUI txt_userName;
         #endregion
 
         GlobalDataSystem globalDataSystem;
         GiftSystem giftSystem;
         public PlayerData curPlayer;
+
 
         // 命令处理映射表
         private Dictionary<Regex, Action<string>> commandHandlers;
@@ -46,11 +54,65 @@ namespace Slap.Test
         void Start()
         {
             ipf_user.onSubmit.AddListener(OnUserInput);
-            ipf_userCreate.onSubmit.AddListener(OnUserCreate);
-            ipf_userWinPoint.onSubmit.AddListener(OnUserSetWinPoint);
-            ipf_userSelect.onSubmit.AddListener(OnUserSelect);
-            globalDataSystem = this.GetSystem<GlobalDataSystem>();
-            giftSystem = this.GetSystem<GiftSystem>();
+            btn_userSend.onClick.AddListener(() =>
+            {
+                //是否切换玩家
+                if (ipf_userSelect.text != "")
+                {
+                    OnUserSelect(ipf_userSelect.text);
+                    ipf_userSelect.text = "";
+                    return;
+                }
+
+
+                //是否创建玩家
+                if (ipf_userCreate.text != "")
+                {
+                    OnUserCreate(ipf_userCreate.text);
+                    ipf_userCreate.text = "";
+                }
+                if(curPlayer == null && ipf_userCreate.text == "")
+                {
+                    UIKit.GetPanel<TestPanel>().TipsShow("请先创建或选择玩家");
+                    return;
+                }
+
+                // 提交胜点设置
+                if (ipf_userWinPoint.text == "")
+                    curPlayer.userWinPoint = 0;
+                else
+                    OnUserSetWinPoint(ipf_userWinPoint.text);
+
+
+                //提交阵营
+                HandleJoinCamp("", (PlayerData.CampType)DD_UserCamp.value);
+
+
+                //提交礼物
+                //获取礼物数量
+                int giftCounter = 0;
+                if (ipf_giftCounter.text == "")
+                    giftCounter = 1;
+                else
+                {
+                    int.TryParse(ipf_giftCounter.text, out giftCounter);
+                    if (giftCounter <= 0)
+                    {
+                        UIKit.GetPanel<TestPanel>().TipsShow("礼物数量必须大于0");
+                        return;
+                    }
+                    //提交礼物
+                    if (!CheckPlayer()) return;
+                    giftSystem.HandleGift(curPlayer, DD_GiftType.value, giftCounter);
+                }
+                
+                //当前玩家显示
+                txt_userName.text = $"当前控制玩家为 {curPlayer.userName}";
+
+            });
+
+            globalDataSystem = this.GetSystem<IGlobalDataSystem>() as GlobalDataSystem;
+            giftSystem = this.GetSystem<IGiftSystem>() as GiftSystem;
 
             InitCommandHandlers();
         }
@@ -74,7 +136,6 @@ namespace Slap.Test
         }
 
 
-        //TODO 待更改
         private void OnUserInput(string value)
         {
             if (value == "" || curPlayer.userName == "")
@@ -160,11 +221,26 @@ namespace Slap.Test
             {
                 Debug.Log($"玩家 {value} 选择成功");
                 curPlayer = temp;
+                UIKit.GetPanel<TestPanel>().TipsShow($"选择成功,当前控制玩家为 {curPlayer.userName}");
             }
             else
-                Debug.LogWarning($"玩家 {value} 不存在");
+                UIKit.GetPanel<TestPanel>().TipsShow($"选择失败,玩家 {value} 不存在");
 
         }
+
+        private bool CheckPlayer()
+        {
+            if (curPlayer.userName == string.Empty)
+            {
+                Debug.LogWarning("当前玩家为空");
+                return false;
+            }
+            if (curPlayer.userCamp == PlayerData.CampType.None)
+                //TODO 待更改
+                globalDataSystem.AllotPlayerToCamp(curPlayer, (PlayerData.CampType)UnityEngine.Random.Range(0, 4));
+            return true;
+        }
+
 
         public IArchitecture GetArchitecture()
         {

@@ -10,6 +10,7 @@ namespace Slap.UI
 {
 	public partial class TestPanel
 	{
-		[SerializeField]private UnityEngine.GameObject Test;
+		[SerializeField]private UnityEngine.GameObject Tips;
+		[SerializeField]private UnityEngine.UI.Button Btn_Tips;
 	}
 }

@@ -16,15 +16,25 @@ using Slap.UI;
 namespace Slap
 {
     [CreateAssetMenu(fileName = "GiftConfig", menuName = "Config/GiftConfig"), SerializeField]
-    public class GiftsConfig : ScriptableObject
+    public class GiftConfig : ScriptableObject
     {
         //文本
         public string giftName;
+        public GiftPopData popDatas;
+        public GiftPropData propDatas;
+        public GiftAnimationData animtionDatas;
+        public GiftScoreData scoreDatas;
+        public SpecialEffectData specialGiftData;
+
+    }
+
+    [Serializable]
+    public class SpecialEffectData
+    {
         public GiftPopData[] popDatas = new GiftPopData[7];
         public GiftPropData[] propDatas = new GiftPropData[7];
         public GiftAnimationData[] animtionDatas = new GiftAnimationData[7];
         public GiftScoreData[] scoreDatas = new GiftScoreData[7];
-
     }
 
     [System.Serializable]
@@ -45,7 +55,7 @@ namespace Slap
         //位置在道具动画中处理
         //道具预制体
         public GameObject propPre;
-        
+
         public int propCount;
         public PropType type;
 
@@ -69,7 +79,7 @@ namespace Slap
             Full
         }
     }
-    
+
     [System.Serializable]
     public class GiftScoreData
     {

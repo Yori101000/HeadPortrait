@@ -19,12 +19,14 @@ using UnityEditor.Rendering;
 
 namespace Slap
 {
-    [Registration(typeof(Slap.Push))]
-    public class GiftSystem : AbstractSystem
+    public interface IGiftSystem : IProjectInitSystem { }
+    [Registration(typeof(Slap.Push),typeof(IGiftSystem))]
+    public class GiftSystem : AbstractSystem,IGiftSystem
     {
         //常量
         private const string PropParentName = "PropParent";
-
+        
+        private GiftModel giftModel;
 
         #region  弹窗
         //左侧弹窗
@@ -77,17 +79,20 @@ namespace Slap
             que_RightPlayGiftAnimation = new Queue<PlayGiftAnimationData>();
 
 
+            popPanel = UIKit.GetPanel<PopPanel>();
+            characterPanel = UIKit.GetPanel<CharacterPanel>();
+
+            giftModel = this.GetModel<GiftModel>();
+
+            animationPanel = UIKit.GetPanel<AnimationPanel>();
+            globalDataSystem = this.GetSystem<IGlobalDataSystem>() as GlobalDataSystem;
+
+
         }
 
         public void Start()
         {
             MonoHelper.Update_AddListener(Update);
-
-            popPanel = UIKit.GetPanel<PopPanel>();
-            characterPanel = UIKit.GetPanel<CharacterPanel>();
-
-            animationPanel = UIKit.GetPanel<AnimationPanel>();
-            globalDataSystem = this.GetSystem<GlobalDataSystem>();
 
             _propParent = characterPanel.Find(PropParentName);
         }
@@ -111,10 +116,11 @@ namespace Slap
             }
 
             //加分系统
-            //将礼物添加到处理携程中
-            string timeStamp = DateTime.Now.Ticks.ToString();
 
             globalDataSystem.AddScoreCor(playerData, scoreData).Start();
+            //更新阵营PlayerUI
+            globalDataSystem.OnCampChanged?.Invoke(playerData.userCamp);
+
 
             //TODO 剩余点赞处理
 
@@ -125,45 +131,54 @@ namespace Slap
         /// <summary>
         /// 处理礼物事件
         /// </summary>
-        /// <param name="playerData"></param>
-        /// <param name="config"></param>
-        /// <param name="number">礼物配置序号（对应配置中不同的组刷礼物）</param>
-        public void HandleGift(PlayerData playerData, GiftsConfig config, int number)
+        /// <param name="playerData">发送礼物的玩家数据</param>
+        /// <param name="index">礼物配置索引</param>
+        /// <param name="number">礼物数量</param>
+        /// TODO 优化礼物数量检测
+        public void HandleGift(PlayerData playerData, int index, int number)
         {
             if (playerData.userName == String.Empty)
             {
                 Debug.LogWarning("玩家为空");
                 return;
             }
+            var config = giftModel.giftsConfig.giftConfigs[index];
 
             //加分系统
             //将礼物添加到处理携程中
-            globalDataSystem?.AddScoreCor(playerData, config.scoreDatas[number]).Start();
+            globalDataSystem?.AddScoreCor(playerData, config.scoreDatas, number).Start();
 
             //弹窗
-            PopWindow(playerData, config.popDatas[number]);
+            PopWindow(playerData, config.popDatas, number);
 
             //道具实际效果
-            SpawnProp(playerData, config.propDatas[number]);
+            SpawnProp(playerData, config.propDatas, number);
 
             //动画播放
-            PlayGiftAnimation(playerData, config.animtionDatas[number]);
+            PlayGiftAnimation(playerData, config.animtionDatas);
+
+            //更新阵营PlayerUI
+            globalDataSystem.OnCampChanged?.Invoke(playerData.userCamp);
 
 
         }
 
         #region 弹窗设置
-        private void PopWindow(PlayerData playerData, GiftPopData giftPopData)
+        private void PopWindow(PlayerData playerData, GiftPopData giftPopData, int number)
         {
+
             if (giftPopData.giftIcon == null)
             {
                 Debug.Log("本礼物无弹窗效果");
                 return;
             }
 
+            var giftPropDataClone = giftPopData;
             var popData = new PopData();
             popData.playerData = playerData;
-            popData.giftPopData = giftPopData;
+            popData.giftPopData = giftPropDataClone;
+            //设置实际礼物数量
+            popData.giftPopData.number = number;
 
             if ((int)playerData.userCamp == 1)
                 que_LeftPopWindow.Enqueue(popData);
@@ -226,52 +241,25 @@ namespace Slap
 
         #region 道具设置
 
-        private void SpawnProp(PlayerData playerData, GiftPropData propData)
+        private void SpawnProp(PlayerData playerData, GiftPropData _propData, int number = 1)
         {
-            if (propData.propPre == null)
+            if (_propData.propPre == null)
             {
                 Debug.Log("该礼物没有具体道具");
                 return;
             }
+            
+            //设置道具数量
+            var propData = _propData;
+            propData.propCount = _propData.propCount * number;
+
             //进行道具判断
             if (propData.type == GiftPropData.PropType.ThrowableProp)
                 MonoHelper.Instance.StartCoroutine(HandleProp(playerData, propData));
             else
                 HandleWeapon(playerData, propData);
         }
-        // // 道具处理
-        // private IEnumerator HandleProp(PlayerData playerData, GiftPropData propData)
-        // {
-        //     Camp curCamp = globalDataSystem.campModel.dic_Camp[playerData.userCamp.ToString()];; 
-        //     Camp targetCamp = globalDataSystem.campModel.dic_Camp[curCamp.aimCamp.ToString()];
-        //     Transform startTrans = curCamp.LeftPropPoint;
-
-        //     while (globalDataSystem.campModel.dic_Camp[playerData.userCamp.ToString()].aimCamp == PlayerData.CampType.None)
-        //     {
-        //         //找到当前阵营
-        //         curCamp = globalDataSystem.campModel.dic_Camp[playerData.userCamp.ToString()];
-        //         targetCamp = globalDataSystem.campModel.dic_Camp[curCamp.aimCamp.ToString()];
-
-        //         startTrans = curCamp.LeftPropPoint;
-
-        //         yield return null;
-        //     }
-
-        //     //生成指定数量的道具
-        //     for (int i = 0; i < propData.propCount; i++)
-        //     {
-        //         var propObj = GameObjectLoader.Load(propData.propPre, _propParent.transform);
-        //         var prop = propObj.GetComponent<ThrowableProp>();
-        //         //初始化道具（之后道具自己管理自己）
-        //         prop.Init(curCamp, targetCamp);
-
-        //         //更换发射位置
-        //         startTrans = startTrans == curCamp.RightPropPoint ? curCamp.LeftPropPoint : curCamp.RightPropPoint;
-
-        //         list_Prop.Add(propObj);
-        //         yield return new WaitForSeconds(0.1f);
-        //     }
-        // }
+        
         
         //TODO ???存疑
         private IEnumerator HandleProp(PlayerData playerData, GiftPropData propData)
@@ -303,17 +291,17 @@ namespace Slap
 
             // 局部函数，实时获取
             Camp GetCurCamp() =>
-                globalDataSystem.campModel.dic_Camp[playerData.userCamp.ToString()];
+                globalDataSystem.campModel.Dic_Camp[playerData.userCamp.ToString()];
 
             Camp GetTargetCamp() =>
-                globalDataSystem.campModel.dic_Camp[GetCurCamp().aimCamp.ToString()];
+                globalDataSystem.campModel.Dic_Camp[GetCurCamp().aimCamp.ToString()];
         }
 
         private void HandleWeapon(PlayerData playerData, GiftPropData propData)
         {
             bool isAddBullet = false;
 
-            var campWeapons = globalDataSystem.campModel.dic_Camp[playerData.userCamp.ToString()].list_Weapon;
+            var campWeapons = globalDataSystem.campModel.Dic_Camp[playerData.userCamp.ToString()].list_Weapon;
 
             //检查当前阵营中是否有放武器的位置
             foreach (var curWeapon in campWeapons)
@@ -336,7 +324,7 @@ namespace Slap
             void CreateWeapon()
             {
                 int emptyIndex = campWeapons.FindIndex(w => w == null);
-                if (emptyIndex != -1 && emptyIndex < globalDataSystem.campModel.dic_Camp[playerData.userCamp.ToString()].maxWeapon)
+                if (emptyIndex != -1 && emptyIndex < globalDataSystem.campModel.Dic_Camp[playerData.userCamp.ToString()].maxWeapon)
                 {
 
                     //创建物体，分配位置， 记录数据

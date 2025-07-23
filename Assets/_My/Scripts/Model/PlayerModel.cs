@@ -71,9 +71,11 @@ namespace Slap
             }
         }
 
-        public void ClearDicPlayerData(PlayerData.CampType type)
+        public void ClearDicPlayerData(PlayerData.CampType type, bool isRemove = false)
         {
-
+            Dic_AllRealCampPlayerData[type].Clear();
+            if (isRemove)
+                Dic_AllRealCampPlayerData.Remove(type);
         }
 
     }
@@ -83,6 +85,8 @@ namespace Slap
     {
         public string userName;
         public Sprite icon; //头像
+        public Sprite iconFrame; //头像框
+        public Sprite badge; //徽章
         public int userScore;
         public CampType userCamp = CampType.None;
         public int userWinPoint;

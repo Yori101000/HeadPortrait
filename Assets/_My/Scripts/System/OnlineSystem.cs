@@ -7,28 +7,31 @@
 /// -  All Rights Reserved.
 ///=====================================================
 using YukiFrameWork;
-using UnityEngine;
-using System;
-using System.Threading.Tasks;
 using Slap.UI;
-using XFABManager;
 using YukiFrameWork.UI;
 namespace Slap
 {
-    [Registration(typeof(Slap.Push))]
-    public class OnlineSystem : AbstractSystem
+    public interface IProjectInitSystem : ISystem
+    {
+        void Start();
+        void End();
+
+    }
+
+    public interface IOnlineSystem : IProjectInitSystem { }
+    [Registration(typeof(Slap.Push),typeof(IOnlineSystem))]
+    public class OnlineSystem : AbstractSystem,IOnlineSystem
     {
         private CharacterPanel characterPanel;
         private GlobalDataSystem globalDataSystem;
 
         public override void Init()
         {
-
+            globalDataSystem = this.GetSystem<IGlobalDataSystem>() as GlobalDataSystem;
+            characterPanel = UIKit.GetPanel<CharacterPanel>();
         }
         public void Start()
         {
-            globalDataSystem = this.GetSystem<GlobalDataSystem>();
-            characterPanel = UIKit.GetPanel<CharacterPanel>();
            
             // GetCampNum();
         }
@@ -42,7 +45,7 @@ namespace Slap
         public void GetCampNum(int campNum)
         {
             
-        
+            
             globalDataSystem.campModel.campCount = campNum;
            
         }

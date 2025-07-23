@@ -14,83 +14,91 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   giftName: 
   popDatas:
-  - popType: 0
-    giftIcon: {fileID: 0}
-    number: 0
-  - popType: 0
-    giftIcon: {fileID: 0}
-    number: 0
-  - popType: 0
-    giftIcon: {fileID: 0}
-    number: 0
-  - popType: 0
-    giftIcon: {fileID: 0}
-    number: 0
-  - popType: 0
-    giftIcon: {fileID: 0}
-    number: 0
-  - popType: 0
-    giftIcon: {fileID: 0}
-    number: 0
-  - popType: 0
+    popType: 0
     giftIcon: {fileID: 0}
     number: 0
   propDatas:
-  - propPre: {fileID: 8642949172514480451, guid: b8926547689d95a449ad9628d181d370, type: 3}
-    propCount: 10
+    propPre: {fileID: 8642949172514480451, guid: b8926547689d95a449ad9628d181d370, type: 3}
+    propCount: 0
     type: 1
-  - propPre: {fileID: 0}
-    propCount: 10
-    type: 0
-  - propPre: {fileID: 0}
-    propCount: 0
-    type: 0
-  - propPre: {fileID: 0}
-    propCount: 0
-    type: 0
-  - propPre: {fileID: 0}
-    propCount: 0
-    type: 0
-  - propPre: {fileID: 0}
-    propCount: 0
-    type: 0
-  - propPre: {fileID: 0}
-    propCount: 0
-    type: 0
   animtionDatas:
-  - AnimationName: 
-    type: 0
-  - AnimationName: 
-    type: 0
-  - AnimationName: 
-    type: 0
-  - AnimationName: 
-    type: 0
-  - AnimationName: 
-    type: 0
-  - AnimationName: 
-    type: 0
-  - AnimationName: 
+    AnimationName: 
     type: 0
   scoreDatas:
-  - baseScore: 0
-    point: 0
-    duration: 0
-  - baseScore: 0
-    point: 0
-    duration: 0
-  - baseScore: 0
-    point: 0
-    duration: 0
-  - baseScore: 0
-    point: 0
-    duration: 0
-  - baseScore: 0
-    point: 0
-    duration: 0
-  - baseScore: 0
-    point: 0
-    duration: 0
-  - baseScore: 0
-    point: 0
-    duration: 0
+    baseScore: 1
+    duration: 10
+  specialGiftData:
+    popDatas:
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    propDatas:
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    animtionDatas:
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    scoreDatas:
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0

@@ -45,17 +45,17 @@ namespace Slap
 
 
 
-        private Transform aimCampTrans => globalDataSystem.campModel.dic_Camp[globalDataSystem.campModel.dic_Camp[curCamp.ToString()].aimCamp.ToString()].transform;
+        private Transform aimCampTrans => globalDataSystem.campModel.Dic_Camp[globalDataSystem.campModel.Dic_Camp[curCamp.ToString()].aimCamp.ToString()].transform;
         void Start()
         {
-            globalDataSystem = this.GetSystem<GlobalDataSystem>();
+            globalDataSystem = this.GetSystem<IGlobalDataSystem>() as GlobalDataSystem;
             bulletParent = UIKit.GetPanel<CharacterPanel>().Find("BulletParent").transform;
         }
 
         private void Update()
         {
             Aim();
-            if (globalDataSystem.campModel.dic_Camp[curCamp.ToString()].aimCamp != PlayerData.CampType.None)
+            if (globalDataSystem.campModel.Dic_Camp[curCamp.ToString()].aimCamp != PlayerData.CampType.None)
                 HandleFire();
         }
 
@@ -82,7 +82,7 @@ namespace Slap
             var bullet = GameObjectLoader.Load(bulletPre, bulletParent);
             bullet.transform.position = fireTrans.position;
 
-            bullet.GetComponent<Bullet>()?.Init(bulletIcon, damage, aimCampTrans, speed, globalDataSystem.campModel.dic_Camp[curCamp.ToString()].aimCamp, size, hitEffect);
+            bullet.GetComponent<Bullet>()?.Init(bulletIcon, damage, aimCampTrans, speed, curCamp, globalDataSystem.campModel.Dic_Camp[curCamp.ToString()].aimCamp, size, hitEffect);
         }
 
         private void Aim()

@@ -14,23 +14,27 @@ using XFABManager;
 using System.Net.NetworkInformation;
 namespace Slap
 {
-    public class Bullet : MonoBehaviour
+    public class Bullet : MonoBehaviour, IController
     {
+        GlobalDataSystem globalDataSystem;
+
         private Sprite sprite;
         private int damage;
         private Transform aimTrans;
         private float speed;
         private Image icon;
+        private PlayerData.CampType campType = PlayerData.CampType.None;
         private PlayerData.CampType aimCamp = PlayerData.CampType.None;
         private GameObject hitEffectPre;
         private Transform hitEffectParent;
 
         private BoxCollider2D boxCollider2D;
         private RectTransform rectTransform;
-        public void Init(Sprite _sprite, int _damage, Transform _aimTrans,
-                         float _speed, PlayerData.CampType _aimCamp, float _size,
+        public void Init( Sprite _sprite, int _damage, Transform _aimTrans,
+                         float _speed, PlayerData.CampType _campType, PlayerData.CampType _aimCamp, float _size,
                          GameObject _hitEffectPre)
         {
+            campType = _campType;
             sprite = _sprite;
             damage = _damage;
             aimTrans = _aimTrans;
@@ -55,6 +59,8 @@ namespace Slap
             boxCollider2D = GetComponent<BoxCollider2D>();
             rectTransform = GetComponent<RectTransform>();
             hitEffectParent = GameObject.Find("HitEffectParent").transform;
+
+            globalDataSystem = this.GetSystem<IGlobalDataSystem>() as GlobalDataSystem;
         }
         void Update()
         {
@@ -84,7 +90,7 @@ namespace Slap
             {
                 if (collision.GetComponent<Camp>().campType == aimCamp)
                 {
-                    collision.GetComponent<Camp>().ReduceHealth(damage);
+                    collision.GetComponent<Camp>().ReduceHealth(damage, globalDataSystem.campModel.Dic_Camp[campType.ToString()]);
                     var hitEffect = GameObjectLoader.Load(hitEffectPre, hitEffectParent);
                     hitEffect.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
 
@@ -92,6 +98,10 @@ namespace Slap
                 }
             }
         }
-        
+
+        public IArchitecture GetArchitecture()
+        {
+            return Push.Global;
+        }
     }
 }

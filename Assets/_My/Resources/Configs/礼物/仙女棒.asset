@@ -14,83 +14,91 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   giftName: "\u4ED9\u5973\u68D2"
   popDatas:
-  - popType: 0
+    popType: 0
     giftIcon: {fileID: 21300000, guid: bf83ea63430999046a5fad286257a652, type: 3}
-    number: 1
-  - popType: 0
-    giftIcon: {fileID: 21300000, guid: bf83ea63430999046a5fad286257a652, type: 3}
-    number: 10
-  - popType: 0
-    giftIcon: {fileID: 21300000, guid: bf83ea63430999046a5fad286257a652, type: 3}
-    number: 66
-  - popType: 0
-    giftIcon: {fileID: 21300000, guid: bf83ea63430999046a5fad286257a652, type: 3}
-    number: 188
-  - popType: 0
-    giftIcon: {fileID: 21300000, guid: bf83ea63430999046a5fad286257a652, type: 3}
-    number: 520
-  - popType: 0
-    giftIcon: {fileID: 21300000, guid: bf83ea63430999046a5fad286257a652, type: 3}
-    number: 999
-  - popType: 0
-    giftIcon: {fileID: 21300000, guid: bf83ea63430999046a5fad286257a652, type: 3}
-    number: 1314
+    number: 0
   propDatas:
-  - propPre: {fileID: 8225503903390221771, guid: b9a73a369101124448c711c0c3a02a53, type: 3}
-    propCount: 0
-    type: 0
-  - propPre: {fileID: 0}
-    propCount: 0
-    type: 0
-  - propPre: {fileID: 0}
-    propCount: 0
-    type: 0
-  - propPre: {fileID: 0}
-    propCount: 0
-    type: 0
-  - propPre: {fileID: 0}
-    propCount: 0
-    type: 0
-  - propPre: {fileID: 0}
-    propCount: 0
-    type: 0
-  - propPre: {fileID: 0}
+    propPre: {fileID: 8225503903390221771, guid: c56c6f178fcd4e44d9967d757b02e2f9, type: 3}
     propCount: 0
     type: 0
   animtionDatas:
-  - AnimationName: 
-    type: 0
-  - AnimationName: 
-    type: 0
-  - AnimationName: 
-    type: 0
-  - AnimationName: 
-    type: 0
-  - AnimationName: 
-    type: 0
-  - AnimationName: 
-    type: 0
-  - AnimationName: 
+    AnimationName: 
     type: 0
   scoreDatas:
-  - baseScore: 0
-    point: 0
-    duration: 0
-  - baseScore: 0
-    point: 0
-    duration: 0
-  - baseScore: 0
-    point: 0
-    duration: 0
-  - baseScore: 0
-    point: 0
-    duration: 0
-  - baseScore: 0
-    point: 0
-    duration: 0
-  - baseScore: 0
-    point: 0
-    duration: 0
-  - baseScore: 0
-    point: 0
-    duration: 0
+    baseScore: 1
+    duration: 10
+  specialGiftData:
+    popDatas:
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    propDatas:
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    animtionDatas:
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    scoreDatas:
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0

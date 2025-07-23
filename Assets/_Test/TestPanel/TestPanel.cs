@@ -7,16 +7,28 @@
 /// -  All Rights Reserved.
 ///=====================================================
 using YukiFrameWork.UI;
-using UnityEngine;
 using YukiFrameWork;
 using UnityEngine.UI;
-using UnityEditor.Purchasing;
 using UnityEngine.Events;
+using TMPro;
 namespace Slap.UI
 {
 	public partial class TestPanel : BasePanel
 	{
-		public void OnClickTest(UnityAction action) => Test.GetComponent<Button>().AddListenerPure(action);
+		public void CampGameOver()
+		{
+			Btn_Tips.AddListenerPure(() => { });
+			var tipsText = Tips.GetComponentInChildren<TextMeshProUGUI>();
+			tipsText.text = "游戏结束";
+			Tips.SetActive(true);
+		}
+		public void TipsShow(string tips)
+		{
+			var tipsText = Tips.GetComponentInChildren<TextMeshProUGUI>();
+			tipsText.text = tips;
+			Tips.SetActive(true);
 
+			Btn_Tips.AddListenerPure(() => Tips.SetActive(false));
+		}
 	}
 }

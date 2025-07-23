@@ -12,8 +12,10 @@ using System;
 using XFABManager;
 namespace Slap
 {
-    public class ThrowableProp : MonoBehaviour
+    public class ThrowableProp : MonoBehaviour,IController
     {
+        private GlobalDataSystem _globalDataSystem;
+
         private PlayerData.CampType _campType;
 
         [SerializeField] private int _damage;
@@ -36,6 +38,7 @@ namespace Slap
 
         public void Init(Camp curCamp, Camp targetCamp)
         {
+            _globalDataSystem = this.GetSystem<IGlobalDataSystem>() as GlobalDataSystem;
 
             _targetCamp = targetCamp;
 
@@ -84,9 +87,14 @@ namespace Slap
             if (t >= 1f)
             {
                 timer = 0;
-                _targetCamp.ReduceHealth(_damage);
+                _targetCamp.ReduceHealth(_damage, _globalDataSystem.campModel.Dic_Camp[_campType.ToString()]);
                 GameObjectLoader.UnLoad(this.gameObject); // 击中目标
             }
+        }
+
+        public IArchitecture GetArchitecture()
+        {
+            return Push.Global;
         }
     }
 }

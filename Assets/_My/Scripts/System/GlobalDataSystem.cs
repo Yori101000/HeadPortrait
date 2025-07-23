@@ -9,12 +9,14 @@
 using YukiFrameWork;
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 using System.Collections;
+
 namespace Slap
 {
-    [Registration(typeof(Slap.Push))]
-    public class GlobalDataSystem : AbstractSystem
+    public interface IGlobalDataSystem : IProjectInitSystem 
+    { }
+    [Registration(typeof(Slap.Push), typeof(IGlobalDataSystem))]
+    public class GlobalDataSystem : AbstractSystem, IGlobalDataSystem
     {
         #region 数据 (因为不需要存档所以直接放到系统中也是可以的)
 
@@ -25,19 +27,14 @@ namespace Slap
         #endregion
 
         //事件
-        private Action OnLeftScoreChanged;
-        private Action OnRightScoreChanged;
-        private Action<PlayerData.CampType> _onCampScoreChanged;
-        public Action OnLeftRoundWin;
+
+        public Action<PlayerData.CampType> OnCampChanged;
+        public Action OnLeftRoundWin;//搞到接口上
         public Action OnRightRoundWin;
         public Action OnLeftWin;
         public Action OnRightWin;
 
-
-        private List<PlayerData> list_leftPlayerData = new List<PlayerData>();
-        private List<PlayerData> list_rightPlayerData = new List<PlayerData>();
-
-
+        public Action<PlayerData.CampType> OnCampDeath;
 
 
         public override void Init()
@@ -52,35 +49,27 @@ namespace Slap
         {
             playersModel.InitPK(campModel.campCount);
 
-            OnLeftScoreChanged += () => UpdateData(1);
+            OnCampChanged += UpdateData;
 
 
             OnLeftWin += () => DispenseWinPoint(1);
-
-            OnRightScoreChanged += () => UpdateData(2);
-
 
             OnRightWin += () => DispenseWinPoint(2);
 
 
 
-
-#if UNITY_EDITOR
-
             //测试用，加载一些头像
             icons = Resources.LoadAll<Sprite>("Arts/UI/头像");
-#endif
+            badges = Resources.LoadAll<Sprite>("Arts/UI/称号");
+            iconFrames = Resources.LoadAll<Sprite>("Arts/UI/头像框");
 
         }
         public void End()
         {
 
-            OnLeftScoreChanged -= () => UpdateData(1);
+            OnCampChanged -= UpdateData;
 
             OnLeftWin -= () => DispenseWinPoint(1);
-
-
-            OnRightScoreChanged -= () => UpdateData(2);
 
             OnLeftWin -= () => DispenseWinPoint(2);
 
@@ -92,26 +81,14 @@ namespace Slap
 
         }
 
-
-
         #region 更新数据
 
-        private void UpdateData(int camp)
+        private void UpdateData(PlayerData.CampType camp)
         {
-            // if (camp == 1)
-            // {
-            //     list_leftPlayerData = playersModel.Dic_LeftPlayerData.OrderByDescending(pair => pair.Value.userScore)
-            //         .Select(pair => pair.Value).ToList();
-            //     Debug.Log($"更新左侧玩家数据，当前数量: {list_leftPlayerData.Count}");
-            // }
-            // else if (camp == 2)
-            // {
-            //     list_rightPlayerData = playersModel.Dic_RightPlayerData.OrderByDescending(pair => pair.Value.userScore)
-            //         .Select(pair => pair.Value).ToList();
-            //     Debug.Log($"更新右侧玩家数据，当前数量: {list_rightPlayerData.Count}");
-            // }
+            campModel.Dic_Camp[camp.ToString()].UpdatePlayerUI();
 
         }
+
 
 
 
@@ -133,15 +110,15 @@ namespace Slap
             }
         }
 
-        public IEnumerator AddScoreCor(PlayerData playerData, GiftScoreData propData)
+        public IEnumerator AddScoreCor(PlayerData playerData, GiftScoreData propData, int number = 1)
         {
             int timer = 0;
             int additions = 0;
 
             while (timer < propData.duration)
             {
-                playerData.userScore += propData.baseScore;
-                additions += propData.baseScore;
+                playerData.userScore += propData.baseScore * number;
+                additions += propData.baseScore * number;
 
                 yield return new WaitForSeconds(1f);
                 timer++;
@@ -168,24 +145,23 @@ namespace Slap
                 Debug.LogWarning($"玩家 {playerData.userName} 已经存在，无法创建重复的玩家数据。");
                 return false;
             }
-#if UNITY_EDITOR
-            SetRandomIcon(playerData);
-#endif
+
+            SetRandomInitPlayer(playerData);
+
             playersModel.Dic_AllPlayerData.Add(playerData.userName, playerData);
             return true;
         }
         //分配阵营
         public bool AllotPlayerToCamp(PlayerData playerData, PlayerData.CampType toCamp)
         {
-            if (!playersModel.Dic_AllRealCampPlayerData.ContainsKey(toCamp) || campModel.dic_Camp[toCamp.ToString()].hasDead == true)
+            if (!playersModel.Dic_AllRealCampPlayerData.ContainsKey(toCamp) || campModel.Dic_Camp[toCamp.ToString()].hasDead == true)
             {
                 Debug.Log($"当前阵营 {toCamp} 不存在，跳过");
                 return false;
             }
-
-            if (playersModel.Dic_AllRealCampPlayerData[toCamp].TryGetValue(playerData.userName, out PlayerData existingInCampPlayerData))
+            if (playerData.userCamp != PlayerData.CampType.None)
             {
-                Debug.Log($"玩家 {existingInCampPlayerData.userName} 已在 {existingInCampPlayerData.userCamp} 阵营");
+                Debug.LogWarning($"玩家 {playerData.userName} 已经在 {playerData.userCamp} 阵营，无法重新分配");
                 return false;
             }
             else
@@ -194,7 +170,10 @@ namespace Slap
                 playerData.userCamp = toCamp;
                 playersModel.Dic_AllRealCampPlayerData[toCamp].Add(playerData.userName, playerData);
                 AllotWinPoint(toCamp);
-                _onCampScoreChanged?.Invoke(playerData.userCamp);
+
+
+                OnCampChanged?.Invoke(playerData.userCamp);
+                Debug.Log($"玩家 {playerData.userName} 被分配到 {toCamp} 阵营");
 
                 return true;
             }
@@ -215,7 +194,7 @@ namespace Slap
 
         public bool ChangeAttackCamp(PlayerData curPlayerData, PlayerData.CampType attackCamp)
         {
-            if (!playersModel.Dic_AllRealCampPlayerData.ContainsKey(attackCamp) || campModel.dic_Camp[attackCamp.ToString()].hasDead == true)
+            if (!playersModel.Dic_AllRealCampPlayerData.ContainsKey(attackCamp) || campModel.Dic_Camp[attackCamp.ToString()].hasDead == true)
             {
                 Debug.Log($"当前阵营 {attackCamp} 不存在，跳过");
                 return false;
@@ -234,10 +213,21 @@ namespace Slap
             }
             else
             {
-                campModel.dic_Camp[curPlayerData.userCamp.ToString()].aimCamp = attackCamp;
+                campModel.Dic_Camp[curPlayerData.userCamp.ToString()].aimCamp = attackCamp;
                 Debug.Log($"{curPlayerData.userCamp} {curPlayerData.userName} 将 {attackCamp} 设置为攻击目标");
                 return true;
             }
+
+        }
+
+        public void HandleDeathCamp(PlayerData.CampType campType)
+        {
+            //清理PlayerSModel中数据
+            playersModel.ClearDicPlayerData(campType, true);
+
+            //清理CampModel中数据
+            campModel.List_RealCamp.Remove(campModel.Dic_Camp[campType.ToString()]);
+            campModel.Dic_Camp.Remove(campType.ToString());
 
         }
 
@@ -268,19 +258,28 @@ namespace Slap
         #region Test
 
         private Sprite[] icons;
+        private Sprite[] badges;
+        private Sprite[] iconFrames;
 
-        public void SetRandomIcon(PlayerData playerData)
+        public void SetRandomInitPlayer(PlayerData playerData)
         {
             if (icons != null && icons.Length > 0)
             {
                 int index = UnityEngine.Random.Range(0, icons.Length);
                 playerData.icon = icons[index];
             }
-            else
+            if (badges != null && badges.Length > 0)
             {
-                Debug.LogWarning("未找到任何图标资源！");
+                int index = UnityEngine.Random.Range(0, badges.Length);
+                playerData.badge = badges[index];
+            }
+            if (iconFrames != null && iconFrames.Length > 0)
+            {
+                int index = UnityEngine.Random.Range(0, iconFrames.Length);
+                playerData.iconFrame = iconFrames[index];
             }
         }
+        
 
         #endregion
 

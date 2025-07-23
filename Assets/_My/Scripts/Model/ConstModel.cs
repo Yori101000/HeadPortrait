@@ -25,5 +25,8 @@ namespace Slap
         //状态机变量
         public const string StateValue_GameState = "GameState";
 
+        //资源加载路径
+        public const string GiftsConfigPath = "Configs/礼物/GiftsConfig"; //礼物配置路径
+
     }
 }

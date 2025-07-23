@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93fe4e2c68e5a1441a44c76d0561cbf3, type: 3}
+  m_Name: "\u751C\u751C\u5708"
+  m_EditorClassIdentifier: 
+  giftName: 
+  popDatas:
+    popType: 0
+    giftIcon: {fileID: 21300000, guid: d77850a834db27d47b51212959e81adb, type: 3}
+    number: 0
+  propDatas:
+    propPre: {fileID: 0}
+    propCount: 0
+    type: 0
+  animtionDatas:
+    AnimationName: 
+    type: 0
+  scoreDatas:
+    baseScore: 1
+    duration: 10
+  specialGiftData:
+    popDatas:
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    - popType: 0
+      giftIcon: {fileID: 0}
+      number: 0
+    propDatas:
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    - propPre: {fileID: 0}
+      propCount: 0
+      type: 0
+    animtionDatas:
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    - AnimationName: 
+      type: 0
+    scoreDatas:
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0
+    - baseScore: 0
+      duration: 0

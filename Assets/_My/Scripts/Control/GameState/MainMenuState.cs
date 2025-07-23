@@ -7,54 +7,33 @@
 /// -  All Rights Reserved.
 ///=====================================================
 using YukiFrameWork.Machine;
-using UnityEngine;
 using YukiFrameWork;
 using YukiFrameWork.UI;
 using Slap.UI;
-using System.Threading.Tasks;
 namespace Slap
 {
 	public class MainMenuState : StateBehaviour
 	{
 		public override void OnEnter()
 		{
-			//TODO 临时
 			// 打开MainMenu面板
 			var panel = UIKit.ShowPanel<MainMenuPanel>();
-			panel.OnClickBtn1(async () =>
+			panel.OnClickBtn(async () =>
 			{
-				this.GetSystem<GlobalDataSystem>().campModel.campCount = 2;
-				// this.GetSystem<OnlineSystem>().GetCampNum(2);
+			
+				(this.GetSystem<IGlobalDataSystem>() as GlobalDataSystem).campModel.campCount = 2;
+
+				//TODO 使用网络获取当前的战斗阵营数量
+				//这里是测试用的
+				(this.GetSystem<IOnlineSystem>() as OnlineSystem).GetCampNum(3);
+
 				UIKit.OpenPanel<LoadingPanel>();
-				//设置加载的最短时间
-				await Task.Delay(1000);
+				//设置加载的最短时间 这个是框架的等待一秒，性能更好一点
+				await CoroutineTool.WaitForSeconds(1);
+
 				SetInt(ConstModel.StateValue_GameState, (int)GameState.WaitStart);
 			});
 
-			panel.OnClickBtn2(async () =>
-			{
-
-				this.GetSystem<GlobalDataSystem>().campModel.campCount = 3;
-				// this.GetSystem<OnlineSystem>().GetCampNum(3);
-
-				UIKit.OpenPanel<LoadingPanel>();
-				//设置加载的最短时间
-				await Task.Delay(1000);
-				SetInt(ConstModel.StateValue_GameState, (int)GameState.WaitStart);
-
-			});
-			panel.OnClickBtn3(async () =>
-		   	{
-				
-				this.GetSystem<GlobalDataSystem>().campModel.campCount = 4;
-				// this.GetSystem<OnlineSystem>().GetCampNum(4);
-
-				UIKit.OpenPanel<LoadingPanel>();
-				//设置加载的最短时间
-				await Task.Delay(1000);
-				SetInt(ConstModel.StateValue_GameState, (int)GameState.WaitStart);
-
-		   	});
 		}
 		public override void OnUpdate()
 		{

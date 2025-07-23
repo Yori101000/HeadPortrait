@@ -8,7 +8,7 @@ namespace Slap
         private GiftSystem giftSystem;
         void Start()
         {
-            giftSystem = this.GetSystem<GiftSystem>();
+            giftSystem = this.GetSystem<IGiftSystem>() as GiftSystem;
         }
         private void StopLeftPopWindow()
         {

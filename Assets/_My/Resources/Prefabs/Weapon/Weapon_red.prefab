@@ -128,7 +128,7 @@ MonoBehaviour:
   fireTrans: {fileID: 5195218119413856009}
   damage: 10
   attackInterval: 1
-  bulletIcon: {fileID: 21300000, guid: 7943a1685af23ec4eb061e51048722c4, type: 3}
+  bulletIcon: {fileID: 21300000, guid: 500bf24685f58e747bc3c07bc93c625d, type: 3}
   speed: 1
   size: 2
   hitEffect: {fileID: 3630950076977652491, guid: d0ee11761a4137645a9a1b0bd1ea7e53, type: 3}
